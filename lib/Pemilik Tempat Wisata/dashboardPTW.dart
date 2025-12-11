@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'profilePTW.dart'; // Pastikan import profilePTW
+import 'propertyList.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -18,7 +19,15 @@ class _DashboardPageState extends State<DashboardPage> {
         context,
         MaterialPageRoute(builder: (context) => const ProfilePage()),
       );
-    } else {
+    } else if (index == 2) {
+      // Ke Halaman Profile (Tetap push biasa agar bisa di-back)
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const ProfilePage()),
+      );
+    } 
+    // Tidak perlu setState untuk index 0 karena kita sudah di halaman Dashboard
+    else {
       setState(() {
         _selectedIndex = index;
       });
