@@ -16,21 +16,21 @@ class _LoginScreenState extends State<LoginScreen> {
   void _handleLogin() {
     String username = _usernameController.text;
     String password = _passwordController.text;
-    if (username == 'lambda123' && password == 'pass123') {
+    if (username == 'alnilambda' && password == '123') {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const DashboardPage()),
       );
     } 
     
-    else if (username == 'admin' && password == 'admin123') {
+    else if (username == 'riska' && password == '123') {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const UnderConstructionPage()),
       );
     } 
     
-    else if (username == 'user' && password == 'user123') {
+    else if (username == 'faiz' && password == '123') {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const UnderConstructionPage()),
