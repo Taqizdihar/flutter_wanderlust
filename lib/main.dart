@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'Wisatawan/models/favorit_provider.dart';
-
 import 'login.dart';
 
 void main() {

@@ -14,13 +14,11 @@ class _PropertiesPageState extends State<PropertiesPage> {
 
   void _onItemTapped(int index) {
     if (index == 0) {
-      // --- LOGIKA BARU: Kembali ke Dashboard ---
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const DashboardPage()),
       );
     } else if (index == 2) {
-      // --- LOGIKA BARU: Ke Halaman Profile ---
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const ProfilePage()),
@@ -57,7 +55,6 @@ class _PropertiesPageState extends State<PropertiesPage> {
                     },
                     child: const CircleAvatar(
                       radius: 24,
-                      // Pastikan nama file gambar sesuai dengan yang ada di folder assets
                       backgroundImage: AssetImage(
                         'assets/images/PTW Profile Picture.jpg',
                       ),

@@ -14,14 +14,11 @@ class _DashboardPageState extends State<DashboardPage> {
 
   void _onItemTapped(int index) {
     if (index == 1) {
-      // --- LOGIKA BARU: Ke Halaman Properties ---
-      // Menggunakan pushReplacement agar tab berpindah tanpa menumpuk halaman
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const PropertiesPage()),
       );
     } else if (index == 2) {
-      // Ke Halaman Profile (Tetap push biasa agar bisa di-back)
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const ProfilePage()),
@@ -70,7 +67,6 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      // Navigasi ke Profile saat foto diklik
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (c) => const ProfilePage()),
@@ -78,7 +74,6 @@ class _DashboardPageState extends State<DashboardPage> {
                     },
                     child: const CircleAvatar(
                       radius: 28,
-                      // Menggunakan AssetImage
                       backgroundImage: AssetImage(
                         'assets/images/PTW Profile Picture.jpg',
                       ),

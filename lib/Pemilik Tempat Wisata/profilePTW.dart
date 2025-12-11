@@ -46,7 +46,6 @@ class ProfilePage extends StatelessWidget {
 
             const CircleAvatar(
               radius: 60,
-              // Menggunakan AssetImage
               backgroundImage: AssetImage(
                 'assets/images/PTW Profile Picture.jpg',
               ),
@@ -89,7 +88,6 @@ class ProfilePage extends StatelessWidget {
 
             const SizedBox(height: 30),
 
-            // Personal Information
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
@@ -130,7 +128,6 @@ class ProfilePage extends StatelessWidget {
 
             const SizedBox(height: 30),
 
-            // Support
             const Divider(color: Color(0xFF26C6DA), thickness: 2),
             ListTile(
               contentPadding: const EdgeInsets.symmetric(
@@ -165,7 +162,6 @@ class ProfilePage extends StatelessWidget {
               },
             ),
 
-            // Log Out
             const Divider(color: Colors.redAccent, thickness: 2),
             ListTile(
               contentPadding: const EdgeInsets.symmetric(
