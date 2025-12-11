@@ -13,11 +13,12 @@ class _DashboardPageState extends State<DashboardPage> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
-    if (index == 2) {
-      // Navigasi ke Halaman Profile jika tab Account diklik
-      Navigator.push(
+    if (index == 1) {
+      // --- LOGIKA BARU: Ke Halaman Properties ---
+      // Menggunakan pushReplacement agar tab berpindah tanpa menumpuk halaman
+      Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const ProfilePage()),
+        MaterialPageRoute(builder: (context) => const PropertiesPage()),
       );
     } else if (index == 2) {
       // Ke Halaman Profile (Tetap push biasa agar bisa di-back)
@@ -26,7 +27,7 @@ class _DashboardPageState extends State<DashboardPage> {
         MaterialPageRoute(builder: (context) => const ProfilePage()),
       );
     } 
-    // Tidak perlu setState untuk index 0 karena kita sudah di halaman Dashboard
+
     else {
       setState(() {
         _selectedIndex = index;
