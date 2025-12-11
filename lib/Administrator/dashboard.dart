@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-// Import file-file lain dalam folder Administrator (Import relatif)
 import 'property_list.dart';
 import 'member_list.dart';
 import 'property_owner_list.dart';
 import 'admin_profile.dart';
 
-// Ubah nama class agar tidak bentrok dengan Dashboard PTW
 class AdminDashboardPage extends StatelessWidget {
   const AdminDashboardPage({super.key});
 
@@ -18,7 +16,6 @@ class AdminDashboardPage extends StatelessWidget {
       bottomNavigationBar: _bottomNavBar(),
       body: Stack(
         children: [
-          // ===== Background Curve =====
           Container(
             height: 220,
             decoration: BoxDecoration(
@@ -43,33 +40,35 @@ class AdminDashboardPage extends StatelessWidget {
 
                   const SizedBox(height: 30),
 
-                  // ===== STATISTIK =====
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // 🔹 TOTAL MEMBERS
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => const MemberListPage()),
+                              builder: (_) => const MemberListPage(),
+                            ),
                           );
                         },
                         child: _statCard(Icons.people, "Total Members", "137"),
                       ),
 
-                      // 🔹 TOTAL PROPERTIES
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => PropertyListPage()),
+                              builder: (_) => PropertyListPage(),
+                            ),
                           );
                         },
                         child: _statCard(
-                            Icons.home_work, "Total Properties", "34"),
+                          Icons.home_work,
+                          "Total Properties",
+                          "34",
+                        ),
                       ),
                     ],
                   ),
@@ -79,36 +78,41 @@ class AdminDashboardPage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // 🔥 OWNER LIST
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => PropertyOwnerListPage()),
+                              builder: (_) => PropertyOwnerListPage(),
+                            ),
                           );
                         },
                         child: _statCard(Icons.groups, "Owner List", "67"),
                       ),
 
                       _statCard(
-                          Icons.account_balance_wallet, "Total Top Up", "32"),
+                        Icons.account_balance_wallet,
+                        "Total Top Up",
+                        "32",
+                      ),
                     ],
                   ),
 
                   const SizedBox(height: 25),
 
                   _wideCard(
-                      icon: Icons.monetization_on,
-                      title: "Accumulated Revenues",
-                      value: "Rp. 3.000.000"),
+                    icon: Icons.monetization_on,
+                    title: "Accumulated Revenues",
+                    value: "Rp. 3.000.000",
+                  ),
 
                   const SizedBox(height: 20),
 
                   _wideCard(
-                      icon: Icons.bar_chart,
-                      title: "Average Revenues Per Transaction",
-                      value: "Rp. 150.000"),
+                    icon: Icons.bar_chart,
+                    title: "Average Revenues Per Transaction",
+                    value: "Rp. 150.000",
+                  ),
                 ],
               ),
             ),
@@ -118,8 +122,7 @@ class AdminDashboardPage extends StatelessWidget {
     );
   }
 
-  // ================= HEADER =================
-  Widget _header(BuildContext context) { // Tambahkan parameter context jika error, tapi biasanya context sudah tersedia di class
+  Widget _header(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -128,10 +131,7 @@ class AdminDashboardPage extends StatelessWidget {
           children: const [
             Text(
               "Welcome",
-              style: TextStyle(
-                color: Colors.white70,
-                fontSize: 20,
-              ),
+              style: TextStyle(color: Colors.white70, fontSize: 20),
             ),
             SizedBox(height: 6),
             Text(
@@ -142,19 +142,18 @@ class AdminDashboardPage extends StatelessWidget {
                 color: Colors.white,
                 shadows: [
                   Shadow(
-                      color: Colors.black26,
-                      blurRadius: 6,
-                      offset: Offset(1, 2))
+                    color: Colors.black26,
+                    blurRadius: 6,
+                    offset: Offset(1, 2),
+                  ),
                 ],
               ),
             ),
           ],
         ),
 
-        // --- UPDATE BAGIAN INI (Tambahkan GestureDetector) ---
         GestureDetector(
           onTap: () {
-            // Navigasi ke Halaman Profil Admin
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const AdminProfilePage()),
@@ -175,9 +174,7 @@ class AdminDashboardPage extends StatelessWidget {
             ),
             child: const CircleAvatar(
               radius: 32,
-              // Gunakan gambar yang sama dengan di profil
               backgroundImage: AssetImage("assets/images/man 2.jpg"),
-              // child: Icon(Icons.person, size: 40), // Gunakan ini jika gambar belum ada
             ),
           ),
         ),
@@ -185,7 +182,6 @@ class AdminDashboardPage extends StatelessWidget {
     );
   }
 
-  // ================= STAT CARD =================
   Widget _statCard(IconData icon, String title, String value) {
     const Color mainColor = Color(0xFF0A6A84);
 
@@ -198,35 +194,44 @@ class AdminDashboardPage extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-              color: mainColor.withOpacity(0.2),
-              blurRadius: 12,
-              offset: const Offset(0, 5)),
+            color: mainColor.withOpacity(0.2),
+            blurRadius: 12,
+            offset: const Offset(0, 5),
+          ),
         ],
       ),
       child: Column(
         children: [
           Icon(icon, size: 32, color: mainColor),
           const SizedBox(height: 10),
-          Text(title,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  color: mainColor,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600)),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: mainColor,
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
           const SizedBox(height: 10),
-          Text(value,
-              style: const TextStyle(
-                  color: mainColor,
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold)),
+          Text(
+            value,
+            style: const TextStyle(
+              color: mainColor,
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ],
       ),
     );
   }
 
-  // ================= WIDE CARD =================
-  Widget _wideCard(
-      {required IconData icon, required String title, required String value}) {
+  Widget _wideCard({
+    required IconData icon,
+    required String title,
+    required String value,
+  }) {
     const Color mainColor = Color(0xFF0A6A84);
 
     return Container(
@@ -236,9 +241,10 @@ class AdminDashboardPage extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-              color: mainColor.withOpacity(0.2),
-              blurRadius: 14,
-              offset: const Offset(0, 5)),
+            color: mainColor.withOpacity(0.2),
+            blurRadius: 14,
+            offset: const Offset(0, 5),
+          ),
         ],
       ),
       child: Row(
@@ -248,17 +254,23 @@ class AdminDashboardPage extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title,
-                  style: const TextStyle(
-                      color: mainColor,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600)),
+              Text(
+                title,
+                style: const TextStyle(
+                  color: mainColor,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
               const SizedBox(height: 5),
-              Text(value,
-                  style: const TextStyle(
-                      color: mainColor,
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold)),
+              Text(
+                value,
+                style: const TextStyle(
+                  color: mainColor,
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
         ],
@@ -266,13 +278,10 @@ class AdminDashboardPage extends StatelessWidget {
     );
   }
 
-  // ================= BOTTOM NAV =================
   Widget _bottomNavBar() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10),
-      decoration: const BoxDecoration(
-        color: Color(0xFF0A6A84),
-      ),
+      decoration: const BoxDecoration(color: Color(0xFF0A6A84)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: const [

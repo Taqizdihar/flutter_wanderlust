@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../login.dart';
-import '../noPage.dart'; // Untuk support/edit profile sementara
+import '../noPage.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -44,13 +44,14 @@ class ProfilePage extends StatelessWidget {
           children: [
             const SizedBox(height: 20),
 
-            // --- UPDATED: PROFILE IMAGE (LOCAL ASSET) ---
             const CircleAvatar(
               radius: 60,
               // Menggunakan AssetImage
-              backgroundImage: AssetImage('assets/images/PTW Profile Picture.jpg'),
+              backgroundImage: AssetImage(
+                'assets/images/PTW Profile Picture.jpg',
+              ),
             ),
-            
+
             const SizedBox(height: 16),
             const Text(
               'Raymond Rafiers',
@@ -65,7 +66,9 @@ class ProfilePage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (c) => const UnderConstructionPage()),
+                  MaterialPageRoute(
+                    builder: (c) => const UnderConstructionPage(),
+                  ),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -153,9 +156,11 @@ class ProfilePage extends StatelessWidget {
                 color: Color(0xFF00838F),
               ),
               onTap: () {
-                 Navigator.push(
+                Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (c) => const UnderConstructionPage()),
+                  MaterialPageRoute(
+                    builder: (c) => const UnderConstructionPage(),
+                  ),
                 );
               },
             ),
@@ -249,12 +254,11 @@ class ProfilePage extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
 
-                // Navigasi Kembali ke Login
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return const LoginScreen(); // Pastikan LoginScreen diimport
+                      return const LoginScreen();
                     },
                   ),
                 );

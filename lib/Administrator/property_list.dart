@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'property_verification.dart';
-import 'property_model.dart'; // File model harus ada di folder Administrator
+import 'property_model.dart';
 
 class PropertyListPage extends StatefulWidget {
   const PropertyListPage({super.key});
@@ -10,7 +10,6 @@ class PropertyListPage extends StatefulWidget {
 }
 
 class _PropertyListPageState extends State<PropertyListPage> {
-  // Data Dummy
   List<PropertyModel> properties = [
     PropertyModel(
       name: "Sarae Hills",
@@ -48,11 +47,14 @@ class _PropertyListPageState extends State<PropertyListPage> {
         ),
         backgroundColor: Colors.white,
         elevation: 0,
-        title: const Text("Property List",
-            style: TextStyle(
-                fontSize: 24,
-                color: Color(0xFF0A6A84),
-                fontWeight: FontWeight.bold)),
+        title: const Text(
+          "Property List",
+          style: TextStyle(
+            fontSize: 24,
+            color: Color(0xFF0A6A84),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(15),
@@ -73,19 +75,26 @@ class _PropertyListPageState extends State<PropertyListPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(p.name,
-                          style: const TextStyle(
-                              fontSize: 20, color: Colors.white)),
-                      Text("Status: ${p.status}",
-                          style: const TextStyle(color: Colors.white)),
-                      Text("Owner: ${p.owner}",
-                          style: const TextStyle(color: Colors.white)),
+                      Text(
+                        p.name,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        "Status: ${p.status}",
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        "Owner: ${p.owner}",
+                        style: const TextStyle(color: Colors.white),
+                      ),
                     ],
                   ),
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    // Navigasi ke halaman Verifikasi
                     final result = await Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -103,7 +112,7 @@ class _PropertyListPageState extends State<PropertyListPage> {
                     }
                   },
                   child: const Text("Actions"),
-                )
+                ),
               ],
             ),
           );

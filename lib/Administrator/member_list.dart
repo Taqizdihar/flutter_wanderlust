@@ -5,11 +5,7 @@ class Member {
   bool isActive;
   String date;
 
-  Member({
-    required this.name,
-    required this.isActive,
-    required this.date,
-  });
+  Member({required this.name, required this.isActive, required this.date});
 }
 
 class MemberListPage extends StatefulWidget {
@@ -34,7 +30,6 @@ class _MemberListPageState extends State<MemberListPage> {
       body: SafeArea(
         child: Column(
           children: [
-            // Header + Back Button
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
               color: Colors.white,
@@ -45,10 +40,12 @@ class _MemberListPageState extends State<MemberListPage> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          Navigator.pop(context); // Kembali ke dashboard
+                          Navigator.pop(context);
                         },
-                        icon: const Icon(Icons.arrow_back,
-                            color: Color(0xff197B82)),
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          color: Color(0xff197B82),
+                        ),
                       ),
                       const SizedBox(width: 5),
                       const Text(
@@ -61,19 +58,17 @@ class _MemberListPageState extends State<MemberListPage> {
                       ),
                     ],
                   ),
-                  // Icon Profil Kecil
                   const CircleAvatar(
                     radius: 20,
                     backgroundColor: Color(0xff197B82),
                     child: Icon(Icons.person, color: Colors.white),
-                  )
+                  ),
                 ],
               ),
             ),
 
             const SizedBox(height: 10),
 
-            // Search + Category
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
@@ -105,17 +100,14 @@ class _MemberListPageState extends State<MemberListPage> {
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: Colors.grey),
                     ),
-                    child: const Center(
-                      child: Text("Category"),
-                    ),
-                  )
+                    child: const Center(child: Text("Category")),
+                  ),
                 ],
               ),
             ),
 
             const SizedBox(height: 20),
 
-            // Member List
             Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -146,7 +138,9 @@ class _MemberListPageState extends State<MemberListPage> {
                             const SizedBox(height: 5),
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 5),
+                                horizontal: 12,
+                                vertical: 5,
+                              ),
                               decoration: BoxDecoration(
                                 color: member.isActive
                                     ? Colors.green.shade200
@@ -195,7 +189,7 @@ class _MemberListPageState extends State<MemberListPage> {
                                   members.removeAt(index);
                                 });
                               },
-                            )
+                            ),
                           ],
                         ),
                       ],
@@ -203,7 +197,7 @@ class _MemberListPageState extends State<MemberListPage> {
                   );
                 },
               ),
-            )
+            ),
           ],
         ),
       ),

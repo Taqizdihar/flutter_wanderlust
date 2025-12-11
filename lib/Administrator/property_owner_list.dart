@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'owner_verification_page.dart'; // Import dari folder yang sama
+import 'owner_verification_page.dart';
 
 class PropertyOwnerListPage extends StatefulWidget {
   const PropertyOwnerListPage({super.key});
@@ -16,13 +16,13 @@ class _PropertyOwnerListPageState extends State<PropertyOwnerListPage> {
       "name": "Guy Errand",
       "status": "Pending",
       "date": "28/4/2025",
-      "image": "https://i.pravatar.cc/150?img=12" // Ganti dummy image
+      "image": "https://i.pravatar.cc/150?img=12",
     },
     {
       "name": "Laverinda",
       "status": "Active",
       "date": "12/3/2025",
-      "image": "https://i.pravatar.cc/150?img=9"
+      "image": "https://i.pravatar.cc/150?img=9",
     },
   ];
 
@@ -49,7 +49,10 @@ class _PropertyOwnerListPageState extends State<PropertyOwnerListPage> {
         title: Text(
           "Property Owner List",
           style: TextStyle(
-              fontSize: 22, fontWeight: FontWeight.bold, color: mainColor),
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: mainColor,
+          ),
         ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: mainColor),
@@ -77,20 +80,24 @@ class _PropertyOwnerListPageState extends State<PropertyOwnerListPage> {
               title: Text(
                 item["name"],
                 style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
+                  fontSize: 18,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 6),
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
-                        color: getStatusColor(item["status"]),
-                        borderRadius: BorderRadius.circular(12)),
+                      color: getStatusColor(item["status"]),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     child: Text(
                       item["status"],
                       style: const TextStyle(color: Colors.white, fontSize: 12),
@@ -105,7 +112,9 @@ class _PropertyOwnerListPageState extends State<PropertyOwnerListPage> {
               ),
               trailing: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white, foregroundColor: mainColor),
+                  backgroundColor: Colors.white,
+                  foregroundColor: mainColor,
+                ),
                 onPressed: () async {
                   final result = await Navigator.push(
                     context,

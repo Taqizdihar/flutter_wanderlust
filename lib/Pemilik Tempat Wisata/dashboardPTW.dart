@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'profilePTW.dart'; // Pastikan import profilePTW
+import 'profilePTW.dart';
 import 'propertyList.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -26,9 +26,7 @@ class _DashboardPageState extends State<DashboardPage> {
         context,
         MaterialPageRoute(builder: (context) => const ProfilePage()),
       );
-    } 
-
-    else {
+    } else {
       setState(() {
         _selectedIndex = index;
       });
@@ -45,7 +43,6 @@ class _DashboardPageState extends State<DashboardPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // --- HEADER ---
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -71,23 +68,26 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                     ],
                   ),
-                  // --- UPDATED: PROFILE IMAGE (LOCAL ASSET) ---
                   GestureDetector(
                     onTap: () {
                       // Navigasi ke Profile saat foto diklik
-                      Navigator.push(context, MaterialPageRoute(builder: (c) => const ProfilePage()));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (c) => const ProfilePage()),
+                      );
                     },
                     child: const CircleAvatar(
                       radius: 28,
                       // Menggunakan AssetImage
-                      backgroundImage: AssetImage('assets/images/PTW Profile Picture.jpg'),
+                      backgroundImage: AssetImage(
+                        'assets/images/PTW Profile Picture.jpg',
+                      ),
                     ),
                   ),
                 ],
               ),
 
               const SizedBox(height: 30),
-              // Container Saldo
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(24),
@@ -129,8 +129,7 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
 
               const SizedBox(height: 24),
-              
-              // Kartu Statistik Baris 1
+
               Row(
                 children: [
                   Expanded(
@@ -154,8 +153,7 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
 
               const SizedBox(height: 16),
-              
-              // Kartu Statistik Baris 2
+
               Row(
                 children: [
                   Expanded(
@@ -179,7 +177,6 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
 
               const SizedBox(height: 24),
-              // Average Order Card
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(24),
@@ -192,10 +189,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   children: [
                     Text(
                       "Average Order Value",
-                      style: TextStyle(
-                        color: Color(0xFF00838F),
-                        fontSize: 16,
-                      ),
+                      style: TextStyle(color: Color(0xFF00838F), fontSize: 16),
                     ),
                     SizedBox(height: 8),
                     Text(
@@ -215,14 +209,8 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'Properties',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Properties'),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_balance_wallet),
             label: 'Account',
@@ -257,10 +245,7 @@ class _DashboardPageState extends State<DashboardPage> {
               const SizedBox(width: 8),
               Text(
                 title,
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 14,
-                ),
+                style: TextStyle(color: Colors.grey[600], fontSize: 14),
               ),
             ],
           ),

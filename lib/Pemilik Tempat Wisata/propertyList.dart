@@ -10,7 +10,7 @@ class PropertiesPage extends StatefulWidget {
 }
 
 class _PropertiesPageState extends State<PropertiesPage> {
-  int _selectedIndex = 1; // Index 1 = Properties (Posisi aktif saat ini)
+  int _selectedIndex = 1;
 
   void _onItemTapped(int index) {
     if (index == 0) {
@@ -26,7 +26,6 @@ class _PropertiesPageState extends State<PropertiesPage> {
         MaterialPageRoute(builder: (context) => const ProfilePage()),
       );
     }
-    // Tidak perlu setState untuk index 1 karena kita sudah di halaman Properties
   }
 
   @override
@@ -38,7 +37,6 @@ class _PropertiesPageState extends State<PropertiesPage> {
           padding: const EdgeInsets.all(24.0),
           child: Column(
             children: [
-              // --- HEADER SECTION ---
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -50,15 +48,19 @@ class _PropertiesPageState extends State<PropertiesPage> {
                       color: Color(0xFF00838F),
                     ),
                   ),
-                  // --- UPDATE: Foto Profil Konsisten dengan Dashboard ---
                   GestureDetector(
                     onTap: () {
-                       Navigator.push(context, MaterialPageRoute(builder: (c) => const ProfilePage()));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (c) => const ProfilePage()),
+                      );
                     },
                     child: const CircleAvatar(
                       radius: 24,
                       // Pastikan nama file gambar sesuai dengan yang ada di folder assets
-                      backgroundImage: AssetImage('assets/images/PTW Profile Picture.jpg'), 
+                      backgroundImage: AssetImage(
+                        'assets/images/PTW Profile Picture.jpg',
+                      ),
                     ),
                   ),
                 ],
