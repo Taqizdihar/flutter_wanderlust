@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../login.dart';
+import '../noPage.dart'; // Untuk support/edit profile sementara
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -42,10 +44,13 @@ class ProfilePage extends StatelessWidget {
           children: [
             const SizedBox(height: 20),
 
+            // --- UPDATED: PROFILE IMAGE (LOCAL ASSET) ---
             const CircleAvatar(
               radius: 60,
-              backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=11'),
+              // Menggunakan AssetImage
+              backgroundImage: AssetImage('assets/images/profile.jpg'),
             ),
+            
             const SizedBox(height: 16),
             const Text(
               'Raymond Rafiers',
@@ -60,13 +65,7 @@ class ProfilePage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return const Scaffold(
-                        body: Center(child: Text("Halaman Edit Profile")),
-                      );
-                    },
-                  ),
+                  MaterialPageRoute(builder: (c) => const UnderConstructionPage()),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -87,6 +86,7 @@ class ProfilePage extends StatelessWidget {
 
             const SizedBox(height: 30),
 
+            // Personal Information
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
@@ -127,6 +127,7 @@ class ProfilePage extends StatelessWidget {
 
             const SizedBox(height: 30),
 
+            // Support
             const Divider(color: Color(0xFF26C6DA), thickness: 2),
             ListTile(
               contentPadding: const EdgeInsets.symmetric(
@@ -152,20 +153,14 @@ class ProfilePage extends StatelessWidget {
                 color: Color(0xFF00838F),
               ),
               onTap: () {
-                // Navigasi ke FAQs (Dummy)
-                Navigator.push(
+                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return const Scaffold(
-                        body: Center(child: Text("Halaman FAQs")),
-                      );
-                    },
-                  ),
+                  MaterialPageRoute(builder: (c) => const UnderConstructionPage()),
                 );
               },
             ),
 
+            // Log Out
             const Divider(color: Colors.redAccent, thickness: 2),
             ListTile(
               contentPadding: const EdgeInsets.symmetric(
@@ -254,13 +249,12 @@ class ProfilePage extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
 
+                // Navigasi Kembali ke Login
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return const Scaffold(
-                        body: Center(child: Text("Halaman Login")),
-                      );
+                      return const LoginScreen(); // Pastikan LoginScreen diimport
                     },
                   ),
                 );

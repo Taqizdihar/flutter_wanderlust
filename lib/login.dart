@@ -77,14 +77,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    const Text(
-                      "Wanderlust",
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF00838F),
-                      ),
-                    )
                   ],
                 ),
               ),
