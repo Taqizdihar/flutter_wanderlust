@@ -62,26 +62,30 @@ class _LoginScreenState extends State<LoginScreen> {
               Container(
                 width: 120,
                 height: 120,
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(color: const Color(0xFF00838F), width: 4),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.travel_explore, size: 40, color: Color(0xFF00838F)),
-                      Text(
-                        "Wanderlust", 
-                        style: TextStyle(
-                          fontSize: 10, 
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF00838F)
-                        )
-                      )
-                    ],
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Image.asset(
+                        'assets/images/Wanderlust Logo Circle.png', 
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      "Wanderlust",
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF00838F),
+                      ),
+                    )
+                  ],
                 ),
               ),
               

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'profilePTW.dart'; // Pastikan import profilePTW
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -11,21 +12,30 @@ class _DashboardPageState extends State<DashboardPage> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (index == 2) {
+      // Navigasi ke Halaman Profile jika tab Account diklik
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const ProfilePage()),
+      );
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE0F7FA), 
+      backgroundColor: const Color(0xFFE0F7FA),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // --- HEADER ---
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -51,20 +61,23 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                     ],
                   ),
+                  // --- UPDATED: PROFILE IMAGE (LOCAL ASSET) ---
                   GestureDetector(
                     onTap: () {
-                      print("Ke Halaman Profil");
+                      // Navigasi ke Profile saat foto diklik
+                      Navigator.push(context, MaterialPageRoute(builder: (c) => const ProfilePage()));
                     },
                     child: const CircleAvatar(
                       radius: 28,
-                      backgroundImage: NetworkImage(
-                          'https://i.pravatar.cc/150?img=11'),
+                      // Menggunakan AssetImage
+                      backgroundImage: AssetImage('assets/images/profile.jpg'),
                     ),
                   ),
                 ],
               ),
 
               const SizedBox(height: 30),
+              // Container Saldo
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(24),
@@ -106,6 +119,8 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
 
               const SizedBox(height: 24),
+              
+              // Kartu Statistik Baris 1
               Row(
                 children: [
                   Expanded(
@@ -125,10 +140,12 @@ class _DashboardPageState extends State<DashboardPage> {
                       iconColor: Colors.teal,
                     ),
                   ),
-              ],
+                ],
               ),
-              
+
               const SizedBox(height: 16),
+              
+              // Kartu Statistik Baris 2
               Row(
                 children: [
                   Expanded(
@@ -152,6 +169,7 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
 
               const SizedBox(height: 24),
+              // Average Order Card
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(24),
