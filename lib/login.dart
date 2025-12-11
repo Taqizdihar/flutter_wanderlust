@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import 'Pemilik Tempat Wisata/dashboardPTW.dart'; 
-import 'noPage.dart'; 
+// Import Dashboard Pemilik Tempat Wisata
+import 'Pemilik Tempat Wisata/dashboardPTW.dart';
+// Import Dashboard Administrator (Perhatikan path folder)
+import 'Administrator/dashboard.dart';
+// Import No Page
+import 'noPage.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,27 +20,32 @@ class _LoginScreenState extends State<LoginScreen> {
   void _handleLogin() {
     String username = _usernameController.text;
     String password = _passwordController.text;
+
+    // --- LOGIKA LOGIN ---
+
+    // 1. PEMILIK TEMPAT WISATA (alnilambda)
     if (username == 'alnilambda' && password == '123') {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const DashboardPage()),
       );
-    } 
-    
+    }
+    // 2. ADMINISTRATOR (riska)
     else if (username == 'riska' && password == '123') {
+      // Masuk ke AdminDashboardPage
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const UnderConstructionPage()),
+        MaterialPageRoute(builder: (context) => const AdminDashboardPage()),
       );
-    } 
-    
+    }
+    // 3. WISATAWAN (faiz)
     else if (username == 'faiz' && password == '123') {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const UnderConstructionPage()),
       );
-    } 
-    
+    }
+    // GAGAL
     else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -57,7 +66,8 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 40),
-              
+
+              // LOGO
               Container(
                 width: 120,
                 height: 120,
@@ -70,18 +80,22 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
+                      // Pastikan file gambar ini ada di assets/images/
                       child: Image.asset(
-                        'assets/images/Wanderlust Logo Circle.png', 
+                        'assets/images/Wanderlust Logo Circle.png',
                         fit: BoxFit.contain,
+                        // Fallback jika error (opsional)
+                        errorBuilder: (context, error, stackTrace) =>
+                            const Icon(Icons.travel_explore,
+                                size: 40, color: Color(0xFF00838F)),
                       ),
                     ),
-                    const SizedBox(height: 4),
                   ],
                 ),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               const Text(
                 "Welcome back",
                 style: TextStyle(
@@ -93,72 +107,90 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 40),
 
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Username / Email",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF00838F),
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  TextField(
-                    controller: _usernameController,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFF00838F)),
+              // INPUT USERNAME
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Username / Email",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF00838F),
+                        fontSize: 16,
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 8),
+                    TextField(
+                      controller: _usernameController,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 14),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide:
+                              const BorderSide(color: Color(0xFF00838F)),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
 
               const SizedBox(height: 20),
 
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Password",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF00838F),
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  TextField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFF00838F)),
+              // INPUT PASSWORD
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Password",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF00838F),
+                        fontSize: 16,
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 8),
+                    TextField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 14),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide:
+                              const BorderSide(color: Color(0xFF00838F)),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
 
               const SizedBox(height: 8),
 
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {
-                     Navigator.push(context, MaterialPageRoute(builder: (c) => const UnderConstructionPage()));
-                  },
-                  child: const Text(
-                    "Forgot password?",
-                    style: TextStyle(
-                      color: Color(0xFF616161),
-                      fontWeight: FontWeight.bold,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (c) => const UnderConstructionPage()));
+                    },
+                    child: const Text(
+                      "Forgot password?",
+                      style: TextStyle(
+                        color: Color(0xFF616161),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -166,23 +198,26 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 24),
 
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _handleLogin,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF00838F),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _handleLogin,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF00838F),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                  ),
-                  child: const Text(
-                    "Log In",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                    child: const Text(
+                      "Log In",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -199,7 +234,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (c) => const UnderConstructionPage()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (c) => const UnderConstructionPage()));
                     },
                     child: const Text(
                       "Sign Up",
@@ -212,10 +250,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               ),
+              const SizedBox(height: 40),
             ],
           ),
         ),
       ),
     );
   }
-}
+} 

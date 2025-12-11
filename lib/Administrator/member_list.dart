@@ -34,21 +34,21 @@ class _MemberListPageState extends State<MemberListPage> {
       body: SafeArea(
         child: Column(
           children: [
-            // 🔹 Header + Back Button
+            // Header + Back Button
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
               color: Colors.white,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // 🔙 BACK BUTTON
                   Row(
                     children: [
                       IconButton(
                         onPressed: () {
-                          Navigator.pop(context); // balik ke dashboard
+                          Navigator.pop(context); // Kembali ke dashboard
                         },
-                        icon: const Icon(Icons.arrow_back, color: Color(0xff197B82)),
+                        icon: const Icon(Icons.arrow_back,
+                            color: Color(0xff197B82)),
                       ),
                       const SizedBox(width: 5),
                       const Text(
@@ -61,18 +61,11 @@ class _MemberListPageState extends State<MemberListPage> {
                       ),
                     ],
                   ),
-
-                  // Profile circle
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: AssetImage("assets/profile.jpg"),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                  // Icon Profil Kecil
+                  const CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Color(0xff197B82),
+                    child: Icon(Icons.person, color: Colors.white),
                   )
                 ],
               ),
@@ -80,12 +73,11 @@ class _MemberListPageState extends State<MemberListPage> {
 
             const SizedBox(height: 10),
 
-            // 🔹 Search + Category
+            // Search + Category
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 children: [
-                  // Search
                   Expanded(
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -104,10 +96,7 @@ class _MemberListPageState extends State<MemberListPage> {
                       ),
                     ),
                   ),
-
                   const SizedBox(width: 15),
-
-                  // Category
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     height: 45,
@@ -126,14 +115,13 @@ class _MemberListPageState extends State<MemberListPage> {
 
             const SizedBox(height: 20),
 
-            // 🔹 Member List
+            // Member List
             Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 itemCount: members.length,
                 itemBuilder: (context, index) {
                   final member = members[index];
-
                   return Container(
                     margin: const EdgeInsets.only(bottom: 15),
                     padding: const EdgeInsets.all(18),
@@ -144,7 +132,6 @@ class _MemberListPageState extends State<MemberListPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // LEFT INFO
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -156,10 +143,7 @@ class _MemberListPageState extends State<MemberListPage> {
                                 color: Color(0xff197B82),
                               ),
                             ),
-
                             const SizedBox(height: 5),
-
-                            // Status
                             Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 5),
@@ -176,7 +160,6 @@ class _MemberListPageState extends State<MemberListPage> {
                                 ),
                               ),
                             ),
-
                             const SizedBox(height: 8),
                             Text(
                               "registered ${member.date}",
@@ -188,26 +171,13 @@ class _MemberListPageState extends State<MemberListPage> {
                             ),
                           ],
                         ),
-
-                        // RIGHT BUTTONS
                         Column(
                           children: [
-                            // Toggle Active / Non aktif
                             ElevatedButton(
                               onPressed: () {
                                 setState(() {
                                   member.isActive = !member.isActive;
                                 });
-
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      member.isActive
-                                          ? "Member activated"
-                                          : "Member set to inactive",
-                                    ),
-                                  ),
-                                );
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.teal,
@@ -217,22 +187,13 @@ class _MemberListPageState extends State<MemberListPage> {
                                 member.isActive ? "Set Inactive" : "Set Active",
                               ),
                             ),
-
                             const SizedBox(height: 10),
-
-                            // Delete button
                             IconButton(
                               icon: const Icon(Icons.delete, color: Colors.red),
                               onPressed: () {
                                 setState(() {
                                   members.removeAt(index);
                                 });
-
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("Member has been removed"),
-                                  ),
-                                );
                               },
                             )
                           ],

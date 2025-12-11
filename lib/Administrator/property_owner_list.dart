@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'owner_verification_page.dart';
+import 'owner_verification_page.dart'; // Import dari folder yang sama
 
 class PropertyOwnerListPage extends StatefulWidget {
+  const PropertyOwnerListPage({super.key});
+
   @override
   State<PropertyOwnerListPage> createState() => _PropertyOwnerListPageState();
 }
@@ -14,25 +16,13 @@ class _PropertyOwnerListPageState extends State<PropertyOwnerListPage> {
       "name": "Guy Errand",
       "status": "Pending",
       "date": "28/4/2025",
-      "image": "https://i.ibb.co/Yp9s7wh/man1.png"
+      "image": "https://i.pravatar.cc/150?img=12" // Ganti dummy image
     },
     {
-      "name": "Laverinda Daedalus",
+      "name": "Laverinda",
       "status": "Active",
       "date": "12/3/2025",
-      "image": "https://i.ibb.co/ynZq7qt/woman1.png"
-    },
-    {
-      "name": "Andi Antares",
-      "status": "Active",
-      "date": "1/12/2024",
-      "image": "https://i.ibb.co/0FQk4dT/man2.png"
-    },
-    {
-      "name": "Raymond Rafiers",
-      "status": "Revision",
-      "date": "18/11/2024",
-      "image": "https://i.ibb.co/P46xKjv/man3.png"
+      "image": "https://i.pravatar.cc/150?img=9"
     },
   ];
 
@@ -66,65 +56,56 @@ class _PropertyOwnerListPageState extends State<PropertyOwnerListPage> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-
       body: ListView.builder(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         itemCount: owners.length,
         itemBuilder: (context, index) {
           var item = owners[index];
 
           return Container(
-            margin: EdgeInsets.only(bottom: 16),
+            margin: const EdgeInsets.only(bottom: 16),
             decoration: BoxDecoration(
               color: mainColor,
               borderRadius: BorderRadius.circular(16),
             ),
-
             child: ListTile(
-              contentPadding: EdgeInsets.all(18),
-
+              contentPadding: const EdgeInsets.all(18),
               leading: CircleAvatar(
                 radius: 28,
                 backgroundImage: NetworkImage(item["image"]),
               ),
-
               title: Text(
                 item["name"],
                 style: const TextStyle(
-                    fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
               ),
-
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 6),
-
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
                         color: getStatusColor(item["status"]),
                         borderRadius: BorderRadius.circular(12)),
                     child: Text(
                       item["status"],
-                      style: TextStyle(color: Colors.white, fontSize: 12),
+                      style: const TextStyle(color: Colors.white, fontSize: 12),
                     ),
                   ),
-
-                  SizedBox(height: 4),
-
+                  const SizedBox(height: 4),
                   Text(
                     "registered ${item["date"]}",
-                    style: const TextStyle(
-                        color: Colors.white70, fontSize: 12),
+                    style: const TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ],
               ),
-
-              // ===== BUTTON ACTIONS =====
               trailing: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: mainColor),
+                    backgroundColor: Colors.white, foregroundColor: mainColor),
                 onPressed: () async {
                   final result = await Navigator.push(
                     context,
@@ -140,7 +121,7 @@ class _PropertyOwnerListPageState extends State<PropertyOwnerListPage> {
                     });
                   }
                 },
-                child: Text("Actions"),
+                child: const Text("Actions"),
               ),
             ),
           );
