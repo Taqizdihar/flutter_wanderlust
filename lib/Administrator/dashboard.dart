@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'property_list.dart';
 import 'member_list.dart';
 import 'property_owner_list.dart';
+import 'admin_profile.dart';
 
 // Ubah nama class agar tidak bentrok dengan Dashboard PTW
 class AdminDashboardPage extends StatelessWidget {
@@ -38,7 +39,7 @@ class AdminDashboardPage extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
-                  _header(),
+                  _header(context),
 
                   const SizedBox(height: 30),
 
@@ -118,7 +119,7 @@ class AdminDashboardPage extends StatelessWidget {
   }
 
   // ================= HEADER =================
-  Widget _header() {
+  Widget _header(BuildContext context) { // Tambahkan parameter context jika error, tapi biasanya context sudah tersedia di class
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -150,25 +151,34 @@ class AdminDashboardPage extends StatelessWidget {
           ],
         ),
 
-        // Foto Profil Admin
-        Container(
-          padding: const EdgeInsets.all(3),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: Colors.white, width: 2),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 6,
-                offset: const Offset(2, 2),
-              ),
-            ],
-          ),
-          child: const CircleAvatar(
-            radius: 32,
-            // Pastikan Anda punya gambar ini di assets atau ganti ke Icon
-            // backgroundImage: AssetImage("assets/images/user.jpg"),
-            child: Icon(Icons.person, size: 40),
+        // --- UPDATE BAGIAN INI (Tambahkan GestureDetector) ---
+        GestureDetector(
+          onTap: () {
+            // Navigasi ke Halaman Profil Admin
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AdminProfilePage()),
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.all(3),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white, width: 2),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 6,
+                  offset: const Offset(2, 2),
+                ),
+              ],
+            ),
+            child: const CircleAvatar(
+              radius: 32,
+              // Gunakan gambar yang sama dengan di profil
+              backgroundImage: AssetImage("assets/images/man 2.jpg"),
+              // child: Icon(Icons.person, size: 40), // Gunakan ini jika gambar belum ada
+            ),
           ),
         ),
       ],
