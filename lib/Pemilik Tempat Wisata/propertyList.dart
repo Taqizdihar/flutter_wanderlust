@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dashboardPTW.dart';
+import 'profilePTW.dart';
 
 class PropertiesPage extends StatefulWidget {
   const PropertiesPage({super.key});
@@ -8,12 +10,23 @@ class PropertiesPage extends StatefulWidget {
 }
 
 class _PropertiesPageState extends State<PropertiesPage> {
-  int _selectedIndex = 1;
+  int _selectedIndex = 1; // Index 1 = Properties (Posisi aktif saat ini)
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (index == 0) {
+      // --- LOGIKA BARU: Kembali ke Dashboard ---
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const DashboardPage()),
+      );
+    } else if (index == 2) {
+      // --- LOGIKA BARU: Ke Halaman Profile ---
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const ProfilePage()),
+      );
+    }
+    // Tidak perlu setState untuk index 1 karena kita sudah di halaman Properties
   }
 
   @override
