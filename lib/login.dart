@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'Pemilik Tempat Wisata/dashboardPTW.dart'; 
-import 'noPage.dart'; 
+import 'Pemilik Tempat Wisata/dashboardPTW.dart';
+import 'noPage.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,28 +16,23 @@ class _LoginScreenState extends State<LoginScreen> {
   void _handleLogin() {
     String username = _usernameController.text;
     String password = _passwordController.text;
-    if (username == 'alnilambda' && password == '123') {
+
+    if (username == 'lambda123' && password == 'pass123') {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const DashboardPage()),
       );
-    } 
-    
-    else if (username == 'riska' && password == '123') {
+    } else if (username == 'admin' && password == 'admin123') {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const UnderConstructionPage()),
       );
-    } 
-    
-    else if (username == 'faiz' && password == '123') {
+    } else if (username == 'user' && password == 'user123') {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const UnderConstructionPage()),
       );
-    } 
-    
-    else {
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Username atau Password salah!"),
@@ -53,15 +48,17 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 40),
-              
+
+              // --- UPDATED: LOGO SECTION (LOCAL ASSET) ---
               Container(
                 width: 120,
                 height: 120,
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16), // Padding agar logo tidak menempel border
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(color: const Color(0xFF00838F), width: 4),
@@ -69,19 +66,28 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // Memanggil Logo Lokal
                     Expanded(
                       child: Image.asset(
-                        'assets/images/Wanderlust Logo Circle.png', 
+                        'assets/images/logo.png', 
                         fit: BoxFit.contain,
                       ),
                     ),
                     const SizedBox(height: 4),
+                    const Text(
+                      "Wanderlust",
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF00838F),
+                      ),
+                    )
                   ],
                 ),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               const Text(
                 "Welcome back",
                 style: TextStyle(
@@ -90,9 +96,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: Color(0xFF00838F),
                 ),
               ),
-
               const SizedBox(height: 40),
 
+              // Form Username
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -117,9 +123,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               ),
-
               const SizedBox(height: 20),
 
+              // Form Password
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -145,14 +151,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               ),
-
               const SizedBox(height: 8),
 
+              // Forgot Password
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () {
-                     Navigator.push(context, MaterialPageRoute(builder: (c) => const UnderConstructionPage()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (c) => const UnderConstructionPage()));
                   },
                   child: const Text(
                     "Forgot password?",
@@ -163,9 +170,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-
               const SizedBox(height: 24),
 
+              // Button Login
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -187,9 +194,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-
               const SizedBox(height: 16),
 
+              // Sign Up
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -199,7 +206,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (c) => const UnderConstructionPage()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (c) => const UnderConstructionPage()));
                     },
                     child: const Text(
                       "Sign Up",
