@@ -8,25 +8,23 @@ class PropertiesPage extends StatefulWidget {
 }
 
 class _PropertiesPageState extends State<PropertiesPage> {
-  int _selectedIndex = 1; // Index 1 karena ini halaman Properties (tengah)
+  int _selectedIndex = 1;
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
-    // Logika pindah halaman nanti disatukan
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE0F7FA), // Background biru muda
+      backgroundColor: const Color(0xFFE0F7FA),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             children: [
-              // --- HEADER SECTION ---
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -40,29 +38,30 @@ class _PropertiesPageState extends State<PropertiesPage> {
                   ),
                   const CircleAvatar(
                     radius: 24,
-                    backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=11'),
+                    backgroundImage: NetworkImage(
+                      'https://i.pravatar.cc/150?img=11',
+                    ),
                   ),
                 ],
               ),
 
               const SizedBox(height: 24),
 
-              // --- ACTION BAR (ADD & SEARCH) ---
               Row(
                 children: [
-                  // Tombol "Add new property"
                   Expanded(
                     child: ElevatedButton.icon(
-                      onPressed: () {
-                        // Logika tambah properti
-                      },
-                      icon: const Icon(Icons.add_circle_outline, color: Colors.white),
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.add_circle_outline,
+                        color: Colors.white,
+                      ),
                       label: const Text(
                         "Add new property",
                         style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF00838F), // Warna Teal tua
+                        backgroundColor: const Color(0xFF00838F),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -71,7 +70,6 @@ class _PropertiesPageState extends State<PropertiesPage> {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  // Tombol Search (Bulat Putih)
                   Container(
                     decoration: const BoxDecoration(
                       color: Colors.white,
@@ -87,38 +85,28 @@ class _PropertiesPageState extends State<PropertiesPage> {
 
               const SizedBox(height: 24),
 
-              // --- DAFTAR KARTU PROPERTI ---
-              // Kita panggil fungsi helper 3 kali untuk membuat 3 kartu
               _buildPropertyCard(),
               const SizedBox(height: 16),
               _buildPropertyCard(),
               const SizedBox(height: 16),
               _buildPropertyCard(),
-              
-              // Tambahan jarak di bawah agar tidak tertutup nav bar
+
               const SizedBox(height: 20),
             ],
           ),
         ),
       ),
 
-      // --- BOTTOM NAVIGATION BAR ---
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'Properties',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Properties'),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_balance_wallet),
             label: 'Account',
           ),
         ],
-        currentIndex: _selectedIndex, 
+        currentIndex: _selectedIndex,
         selectedItemColor: const Color(0xFF00838F),
         onTap: _onItemTapped,
         backgroundColor: Colors.white,
@@ -126,13 +114,11 @@ class _PropertiesPageState extends State<PropertiesPage> {
     );
   }
 
-  // --- WIDGET HELPER: PROPERTY CARD ---
-  // Fungsi ini membuat tampilan kartu agar kita tidak perlu copy-paste kode panjang 3 kali
   Widget _buildPropertyCard() {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF26C6DA), // Warna dasar kartu (Cyan)
+        color: const Color(0xFF26C6DA),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -144,23 +130,20 @@ class _PropertiesPageState extends State<PropertiesPage> {
       ),
       child: Column(
         children: [
-          // BAGIAN ATAS: Gambar dan Info Statistik
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Gambar Tempat Wisata (Kiri)
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.network(
-                  'https://picsum.photos/200', // Gambar random dummy
+                  'https://picsum.photos/200',
                   width: 100,
                   height: 100,
                   fit: BoxFit.cover,
                 ),
               ),
               const SizedBox(width: 16),
-              
-              // Info Statistik (Kanan)
+
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,11 +157,13 @@ class _PropertiesPageState extends State<PropertiesPage> {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    // Badge "Active"
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF76FF03), // Hijau terang
+                        color: const Color(0xFF76FF03),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: const Text(
@@ -191,21 +176,22 @@ class _PropertiesPageState extends State<PropertiesPage> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    
-                    // Statistik Grid Kecil (Baris 1)
+
                     Row(
                       children: [
-                        _buildSmallStat(Icons.confirmation_number, "100 tickets"),
+                        _buildSmallStat(
+                          Icons.confirmation_number,
+                          "100 tickets",
+                        ),
                         const SizedBox(width: 12),
                         _buildSmallStat(Icons.favorite, "54 favorites"),
                       ],
                     ),
                     const SizedBox(height: 4),
-                    // Statistik Grid Kecil (Baris 2)
                     Row(
                       children: [
                         _buildSmallStat(Icons.monetization_on, "250 sold"),
-                         const SizedBox(width: 12),
+                        const SizedBox(width: 12),
                         _buildSmallStat(Icons.touch_app, "400 Clicks"),
                       ],
                     ),
@@ -217,24 +203,24 @@ class _PropertiesPageState extends State<PropertiesPage> {
 
           const SizedBox(height: 16),
 
-          // BAGIAN BAWAH: Tombol Actions dan View
           Row(
             children: [
-              // Tombol Actions (Filled)
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF006064), // Cyan lebih gelap
+                    backgroundColor: const Color(0xFF006064),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text("Actions", style: TextStyle(color: Colors.white)),
+                  child: const Text(
+                    "Actions",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
               const SizedBox(width: 16),
-              // Tombol View (Outlined / Border only)
               Expanded(
                 child: OutlinedButton(
                   onPressed: () {},
@@ -244,7 +230,10 @@ class _PropertiesPageState extends State<PropertiesPage> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text("View", style: TextStyle(color: Colors.white)),
+                  child: const Text(
+                    "View",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
             ],
@@ -254,16 +243,12 @@ class _PropertiesPageState extends State<PropertiesPage> {
     );
   }
 
-  // Helper kecil untuk ikon dan teks statistik putih
   Widget _buildSmallStat(IconData icon, String text) {
     return Row(
       children: [
         Icon(icon, color: Colors.white, size: 14),
         const SizedBox(width: 4),
-        Text(
-          text,
-          style: const TextStyle(color: Colors.white, fontSize: 10),
-        ),
+        Text(text, style: const TextStyle(color: Colors.white, fontSize: 10)),
       ],
     );
   }

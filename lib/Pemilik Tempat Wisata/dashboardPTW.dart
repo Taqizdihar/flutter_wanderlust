@@ -8,22 +8,17 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  // Index untuk Bottom Navigation Bar (simulasi)
   int _selectedIndex = 0;
 
-  // Fungsi untuk menangani navigasi bar bawah
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
-    // Di sini logika navigasi ke halaman lain nanti bisa ditambahkan
-    // Contoh: jika index == 2, Navigator.push ke halaman Account
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Warna background biru muda sesuai gambar
       backgroundColor: const Color(0xFFE0F7FA), 
       body: SafeArea(
         child: SingleChildScrollView(
@@ -31,8 +26,6 @@ class _DashboardPageState extends State<DashboardPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // --- HEADER SECTION ---
-              // Menggunakan Row untuk mensejajarkan Teks (kiri) dan Foto Profil (kanan)
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -53,30 +46,25 @@ class _DashboardPageState extends State<DashboardPage> {
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF00838F), // Warna Teal tua
+                          color: Color(0xFF00838F),
                         ),
                       ),
                     ],
                   ),
-                  // Foto Profil (Clickable)
                   GestureDetector(
                     onTap: () {
-                      // Navigasi ke halaman profil nanti di sini
                       print("Ke Halaman Profil");
                     },
                     child: const CircleAvatar(
                       radius: 28,
                       backgroundImage: NetworkImage(
-                          'https://i.pravatar.cc/150?img=11'), // Placeholder image
+                          'https://i.pravatar.cc/150?img=11'),
                     ),
                   ),
                 ],
               ),
 
               const SizedBox(height: 30),
-
-              // --- TOTAL INCOME CARD ---
-              // Container besar biru
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(24),
@@ -118,12 +106,8 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
 
               const SizedBox(height: 24),
-
-              // --- GRID STATISTIK (MANUAL DENGAN ROW & COLUMN) ---
-              // Baris Pertama Kartu Statistik
               Row(
                 children: [
-                  // Menggunakan Expanded agar kartu membagi lebar layar sama rata
                   Expanded(
                     child: _buildStatCard(
                       icon: Icons.person,
@@ -132,7 +116,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       iconColor: Colors.blue,
                     ),
                   ),
-                  const SizedBox(width: 16), // Jarak antar kartu
+                  const SizedBox(width: 16),
                   Expanded(
                     child: _buildStatCard(
                       icon: Icons.confirmation_number,
@@ -141,12 +125,10 @@ class _DashboardPageState extends State<DashboardPage> {
                       iconColor: Colors.teal,
                     ),
                   ),
-                ],
+              ],
               ),
               
-              const SizedBox(height: 16), // Jarak antar baris
-
-              // Baris Kedua Kartu Statistik
+              const SizedBox(height: 16),
               Row(
                 children: [
                   Expanded(
@@ -170,8 +152,6 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
 
               const SizedBox(height: 24),
-
-              // --- AVERAGE ORDER VALUE CARD ---
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(24),
@@ -205,8 +185,6 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
         ),
       ),
-      
-      // --- BOTTOM NAVIGATION BAR ---
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -230,8 +208,6 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  // Helper Widget untuk membuat Kartu Statistik Kecil (Agar kodingan lebih rapi)
-  // Ini tetap menggunakan Column di dalamnya
   Widget _buildStatCard({
     required IconData icon,
     required String title,

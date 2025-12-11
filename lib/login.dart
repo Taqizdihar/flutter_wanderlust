@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'Pemilik Tempat Wisata/dashboardPTW.dart'; 
+import 'noPage.dart'; 
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -8,44 +10,34 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  // Controller untuk mengambil teks dari input
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  // Fungsi Logika Login Sederhana
   void _handleLogin() {
     String username = _usernameController.text;
     String password = _passwordController.text;
-
-    // --- LOGIKA DUMMY CREDENTIALS ---
-    
-    // 1. ROLE: PEMILIK TEMPAT WISATA
     if (username == 'lambda123' && password == 'pass123') {
-      // Masuk ke Dashboard Pemilik (yang sudah kita buat lengkap)
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const DashboardPage()),
       );
     } 
-    // 2. ROLE: ADMINISTRATOR
+    
     else if (username == 'admin' && password == 'admin123') {
-      // Arahkan ke Under Construction dulu (atau Dashboard Admin jika nanti dibuat)
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const UnderConstructionPage()),
       );
     } 
-    // 3. ROLE: WISATAWAN
+    
     else if (username == 'user' && password == 'user123') {
-      // Arahkan ke Under Construction dulu (atau Home Wisatawan jika nanti dibuat)
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const UnderConstructionPage()),
       );
     } 
-    // GAGAL LOGIN
+    
     else {
-      // Tampilkan pesan error (Snackbar)
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Username atau Password salah!"),
@@ -67,8 +59,6 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               const SizedBox(height: 40),
               
-              // --- LOGO SECTION ---
-              // Menggunakan Container lingkaran dengan border teal sesuai gambar
               Container(
                 width: 120,
                 height: 120,
@@ -78,7 +68,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  // Placeholder logo (Ganti dengan Image.asset('assets/logo.png') jika sudah ada)
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
@@ -109,14 +98,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 40),
 
-              // --- FORM INPUT SECTION ---
-              
-              // Input Email / Username
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    "Username / Email", // Label di luar
+                    "Username / Email",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF00838F),
@@ -132,10 +118,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(color: Color(0xFF00838F)),
                       ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFF00838F)),
-                      ),
                     ),
                   ),
                 ],
@@ -143,7 +125,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 20),
 
-              // Input Password
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -158,14 +139,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 8),
                   TextField(
                     controller: _passwordController,
-                    obscureText: true, // Sembunyikan teks password
+                    obscureText: true,
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFF00838F)),
-                      ),
-                      enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(color: Color(0xFF00838F)),
                       ),
@@ -176,12 +153,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 8),
 
-              // Forgot Password
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () {
-                     // Arahkan ke Under Construction
                      Navigator.push(context, MaterialPageRoute(builder: (c) => const UnderConstructionPage()));
                   },
                   child: const Text(
@@ -196,13 +171,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 24),
 
-              // --- BUTTON LOGIN ---
               SizedBox(
-                width: double.infinity, // Lebar penuh
+                width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _handleLogin,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF00838F), // Warna Teal
+                    backgroundColor: const Color(0xFF00838F),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -221,7 +195,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 16),
 
-              // Sign Up Text
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -231,7 +204,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      // Arahkan ke Under Construction
                       Navigator.push(context, MaterialPageRoute(builder: (c) => const UnderConstructionPage()));
                     },
                     child: const Text(

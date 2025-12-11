@@ -19,17 +19,14 @@ class UnderConstructionPage extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF616161), // Abu-abu tua
+                    color: Color(0xFF616161),
                   ),
                 ),
                 
                 const SizedBox(height: 24),
 
-                // Ikon Konstruksi (Menggunakan Icon bawaan yang mirip)
-                // Jika ingin persis kerucut, biasanya menggunakan aset gambar (Image.asset)
-                // Tapi Icons.construction / Icons.warning_amber bisa jadi alternatif
                 const Icon(
-                  Icons.construction, // Ikon alat/konstruksi
+                  Icons.construction,
                   size: 100,
                   color: Colors.grey,
                 ),
@@ -42,18 +39,17 @@ class UnderConstructionPage extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.grey,
-                    height: 1.5, // Jarak antar baris teks
+                    height: 1.5,
                   ),
                 ),
 
                 const SizedBox(height: 48),
 
-                // Tombol "go back"
                 SizedBox(
-                  width: 150, // Lebar tombol
+                  width: 150,
                   child: OutlinedButton(
                     onPressed: () {
-                      Navigator.pop(context); // Kembali ke halaman sebelumnya
+                      Navigator.pop(context);
                     },
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Colors.grey, width: 2),
