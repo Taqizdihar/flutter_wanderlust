@@ -11,34 +11,33 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _userController = TextEditingController();
+  final TextEditingController _passController = TextEditingController();
 
   void _handleLogin() {
-    String username = _usernameController.text;
-    String password = _passwordController.text;
+    String user = _userController.text;
+    String pass = _passController.text;
 
-    if (username == 'alnilambda' && password == '123') {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const DashboardPage()),
+    Widget? targetPage;
+
+    if (user == 'alnilambda' && pass == '123') {
+      targetPage = const DashboardPage();
+    } else if (user == 'riska' && pass == '123') {
+      targetPage = const AdminDashboardPage();
+    } else if (user == 'faiz' && pass == '123') {
+      targetPage = const RootScreen();
+    }
+
+    if (targetPage != null) {
+      // --- SYARAT 4: SNACKBAR (Login Successful) ---
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Login Successful"), backgroundColor: Colors.teal, duration: Duration(seconds: 2)),
       );
-    } else if (username == 'riska' && password == '123') {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const AdminDashboardPage()),
-      );
-    } else if (username == 'faiz' && password == '123') {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const RootScreen()),
-      );
+      
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => targetPage!));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Username atau Password salah!"),
-          backgroundColor: Colors.red,
-        ),
+        const SnackBar(content: Text("Username atau Password salah!"), backgroundColor: Colors.red),
       );
     }
   }
@@ -49,143 +48,49 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 32.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 40),
-              Container(
-                width: 120,
-                height: 120,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: const Color(0xFF00838F), width: 4),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Image.asset(
-                        'assets/images/Wanderlust Logo Circle.png',
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) =>
-                            const Icon(
-                              Icons.travel_explore,
-                              size: 40,
-                              color: Color(0xFF00838F),
-                            ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              const SizedBox(height: 60),
+              _buildLogo(),
               const SizedBox(height: 24),
-              const Text(
-                "Welcome back",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF00838F),
-                ),
-              ),
+              const Text("Welcome back", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF00838F))),
               const SizedBox(height: 40),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Username / Email",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF00838F),
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: _usernameController,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 14,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: Color(0xFF00838F),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              _buildTextField("Username / Email", _userController, false),
               const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Password",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF00838F),
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: _passwordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 14,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: Color(0xFF00838F),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 24),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _handleLogin,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF00838F),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text(
-                      "Log In",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+              _buildTextField("Password", _passController, true),
+              const SizedBox(height: 30),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _handleLogin,
+                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF00838F), padding: const EdgeInsets.symmetric(vertical: 16), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+                  child: const Text("Log In", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
                 ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildLogo() {
+    return Container(
+      width: 120, height: 120, padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: const Color(0xFF00838F), width: 4)),
+      child: Image.asset('assets/images/Wanderlust Logo Circle.png', fit: BoxFit.contain, errorBuilder: (c, e, s) => const Icon(Icons.travel_explore, size: 40, color: Color(0xFF00838F))),
+    );
+  }
+
+  Widget _buildTextField(String label, TextEditingController controller, bool isPass) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF00838F), fontSize: 16)),
+        const SizedBox(height: 8),
+        TextField(controller: controller, obscureText: isPass, decoration: InputDecoration(contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14), border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFF00838F))))),
+      ],
     );
   }
 }
