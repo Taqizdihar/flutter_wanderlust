@@ -4,7 +4,8 @@ import '../noPage.dart';
 import 'services/api_service.dart'; //
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  final int userId;
+  const ProfilePage({super.key, required this.userId});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -23,7 +24,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _loadUserData() async {
     // Diasumsikan ID User adalah 1 (Taqi / Pemilik)
-    final data = await _apiService.getUserProfile(1); 
+    final data = await _apiService.getUserProfile(widget.userId);
     if (mounted) {
       setState(() {
         _userData = data;

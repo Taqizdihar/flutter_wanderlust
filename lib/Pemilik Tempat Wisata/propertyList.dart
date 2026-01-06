@@ -45,7 +45,7 @@ class _PropertiesPageState extends State<PropertiesPage> {
         )
       );
     } else if (index == 2) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfilePage()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage(userId: widget.userId)));
     }
   }
 
@@ -93,7 +93,7 @@ class _PropertiesPageState extends State<PropertiesPage> {
       children: [
         const Text('My Properties', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF00838F))),
         GestureDetector(
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (c) => const ProfilePage())),
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (c) => ProfilePage(userId: widget.userId))),
           child: const CircleAvatar(radius: 24, backgroundImage: AssetImage('assets/images/PTW Profile Picture.jpg')),
         ),
       ],

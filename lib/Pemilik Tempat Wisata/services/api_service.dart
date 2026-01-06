@@ -5,7 +5,7 @@ import '../models/dashboard_stats.dart';
 
 class ApiService {
   // Gunakan IP Laptop Anda, jangan 'localhost' jika pakai Emulator
-  static const String baseUrl = 'http://192.168.100.39:8000/api/flutter';
+  static const String baseUrl = 'http://127.0.0.1:8000/api/flutter';
 
   Future<Map<String, dynamic>?> login(String email, String password) async {
     try {

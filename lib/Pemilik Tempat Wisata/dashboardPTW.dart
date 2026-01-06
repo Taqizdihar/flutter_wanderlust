@@ -17,6 +17,7 @@ class _DashboardPageState extends State<DashboardPage> {
   int _selectedIndex = 0;
   DashboardStats? _stats;
   bool _isLoading = true;
+  String _userName = "Loading...";
   final ApiService _apiService = ApiService(); // Inisialisasi Service
 
   @override
@@ -28,10 +29,12 @@ class _DashboardPageState extends State<DashboardPage> {
   // --- MENGGUNAKAN API SERVICE ---
   Future<void> _loadData() async {
     // Diasumsikan ID PTW adalah 1 (Sesuaikan dengan data di DB Laravel Anda)
-    final data = await _apiService.getDashboardStats(widget.ptwId); 
+    final statData = await _apiService.getDashboardStats(widget.ptwId);
+    final userData = await _apiService.getUserProfile(widget.userId);
     if (mounted) {
       setState(() {
-        _stats = data;
+        _stats = statData;
+        if (userData != null) _userName = userData['nama'];
         _isLoading = false;
       });
     }
@@ -49,7 +52,7 @@ class _DashboardPageState extends State<DashboardPage> {
         )
       );
     } else if (index == 2) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfilePage()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage(userId: widget.userId)));
     }
   }
 
@@ -89,15 +92,15 @@ class _DashboardPageState extends State<DashboardPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Column(
+        Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Welcome back,', style: TextStyle(fontSize: 16, color: Colors.grey)),
-            Text('Raymond Rafiers', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF00838F))),
+            const Text('Welcome back,', style: TextStyle(fontSize: 16, color: Colors.grey)),
+            Text(_userName, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF00838F))),
           ],
         ),
         GestureDetector(
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (c) => const ProfilePage())),
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (c) => ProfilePage(userId: widget.userId))),
           child: const CircleAvatar(radius: 28, backgroundImage: AssetImage('assets/images/PTW Profile Picture.jpg')),
         ),
       ],
