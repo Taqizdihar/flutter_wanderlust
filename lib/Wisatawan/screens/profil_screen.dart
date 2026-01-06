@@ -1,297 +1,184 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import '../models/user_model.dart';
-import '../widget/menu_item_profil.dart';
+import '../models/user_model.dart'; //
+import '../services/api_service.dart'; //
+import '../../login.dart'; // Import halaman login untuk fungsi Logout
 
-import '../../login.dart';
-import '../../noPage.dart';
+class ProfilScreen extends StatefulWidget {
+  final int userId;
+  const ProfilScreen({super.key, required this.userId});
 
-class ProfilScreen extends StatelessWidget {
-  const ProfilScreen({super.key});
+  @override
+  State<ProfilScreen> createState() => _ProfilScreenState();
+}
 
-  final UserModel dataPengguna = const UserModel(
-    nama: 'Faiz Syafiq Nabily',
-    email: 'faiz@gmail.com',
-    nomorTelepon: '0812-3456-7890',
-    tanggalLahir: '25/10/2000',
-    gender: 'Laki-laki',
-    alamat: 'Peleș Castle, Sinaia, Prahova County, Romania',
-    totalKunjungan: 20,
-    totalPengeluaran: 5000000.00,
-    asetProfil: 'assets/images/faiz.jpg',
-  );
+class _ProfilScreenState extends State<ProfilScreen> {
+  late Future<UserModel?> _futureUser;
+  final ApiService _apiService = ApiService();
+
+  @override
+  void initState() {
+    super.initState();
+    // Meminta ApiService mengambil data profil dari Laravel
+    _futureUser = _apiService.getUserProfile(widget.userId).then((data) {
+      return data != null ? UserModel.fromJson(data) : null;
+    });
+  }
+
+  void _handleLogout() {
+    // Navigasi kembali ke halaman Login dan hapus semua history navigasi
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
+      (route) => false,
+    );
+    
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Berhasil Logout"), backgroundColor: Colors.teal),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.teal.shade50,
+      backgroundColor: Colors.teal.shade50, 
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        title: const Text('Profil Saya', style: TextStyle(color: Colors.teal, fontWeight: FontWeight.bold)),
+        centerTitle: true,
+        backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black87),
+          icon: const Icon(Icons.arrow_back, color: Colors.teal),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          'Profil Pengguna',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
-        ),
-        centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            _buatHeaderProfil(context, dataPengguna),
-            const SizedBox(height: 30),
-            _buatRingkasanPerjalanan(dataPengguna),
-            const SizedBox(height: 30),
-            _buatInformasiPribadi(dataPengguna),
-            const SizedBox(height: 30),
-            _buatMenuAksi(context),
-            const SizedBox(height: 40),
-          ],
-        ),
+      body: FutureBuilder<UserModel?>(
+        future: _futureUser,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError || !snapshot.hasData || snapshot.data == null) {
+            return const Center(child: Text("Gagal memuat profil. Pastikan server menyala."));
+          }
+
+          final user = snapshot.data!;
+          return RefreshIndicator(
+            onRefresh: () async {
+              setState(() {
+                _futureUser = _apiService.getUserProfile(widget.userId).then((data) {
+                  return data != null ? UserModel.fromJson(data) : null;
+                });
+              });
+            },
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+              child: Column(
+                children: [
+                  _buatHeaderProfil(user),
+                  const SizedBox(height: 30),
+                  _buatRingkasanPerjalanan(user),
+                  const SizedBox(height: 20),
+                  _buatInformasiPribadi(user),
+                  const SizedBox(height: 40),
+                  _buatMenuAksi(),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buatHeaderProfil(BuildContext context, UserModel user) {
+  Widget _buatHeaderProfil(UserModel user) {
     return Column(
       children: [
         CircleAvatar(
           radius: 60,
-          backgroundImage: AssetImage(user.asetProfil),
-          backgroundColor: Colors.white,
-          child: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.white, width: 4),
-            ),
-          ),
+          backgroundColor: Colors.teal.shade100,
+          backgroundImage: (user.fotoProfil != null && user.fotoProfil!.isNotEmpty) 
+              ? NetworkImage(user.fotoProfil!) 
+              : null,
+          child: (user.fotoProfil == null || user.fotoProfil!.isEmpty) 
+              ? const Icon(Icons.person, size: 60, color: Colors.teal) 
+              : null,
         ),
-        const SizedBox(height: 10),
-        Text(
-          user.nama,
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
-        ),
-        const SizedBox(height: 15),
-        SizedBox(
-          width: 200,
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (c) => const UnderConstructionPage(),
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.teal.shade400,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-              elevation: 5,
-            ),
-            child: const Text(
-              'Ubah Profil',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-        ),
+        const SizedBox(height: 16),
+        Text(user.nama, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.teal)),
+        Text(user.email, style: const TextStyle(fontSize: 14, color: Colors.grey)),
       ],
     );
   }
 
   Widget _buatRingkasanPerjalanan(UserModel user) {
-    final pemformat = NumberFormat.currency(
-      locale: 'id_ID',
-      symbol: 'Rp. ',
-      decimalDigits: 0,
-    );
     return Container(
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.teal.withOpacity(0.1),
-            blurRadius: 15,
-            offset: const Offset(0, 8),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          const Text(
-            'Ringkasan Perjalanan',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
-              color: Colors.teal,
-            ),
-          ),
-          const Divider(thickness: 2, height: 25),
-          _buatRingkasanBaris(
-            'Total Kunjungan',
-            '${user.totalKunjungan} kunjungan',
-          ),
-          const SizedBox(height: 10),
-          _buatRingkasanBaris(
-            'Total Pengeluaran',
-            pemformat.format(user.totalPengeluaran),
-          ),
+          _itemRingkasan("10", "Perjalanan"),
+          _itemRingkasan("5", "Favorit"),
+          _itemRingkasan("12", "Ulasan"),
         ],
       ),
     );
   }
 
-  Widget _buatRingkasanBaris(String label, String nilai) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: const TextStyle(color: Colors.grey, fontSize: 14)),
-          Text(
-            nilai,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-              fontSize: 16,
-            ),
-          ),
-        ],
-      ),
+  Widget _itemRingkasan(String angka, String label) {
+    return Column(
+      children: [
+        Text(angka, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.teal)),
+        Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+      ],
     );
   }
 
   Widget _buatInformasiPribadi(UserModel user) {
-    return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.teal.withOpacity(0.1),
-            blurRadius: 15,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Informasi Pribadi',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
-              color: Colors.teal,
-            ),
-          ),
-          const Divider(thickness: 2, height: 25),
-          _buatInfoBaris('Email', user.email),
-          _buatInfoBaris('Nomor Telepon', user.nomorTelepon),
-          _buatInfoBaris('Tanggal Lahir', user.tanggalLahir),
-          _buatInfoBaris('Jenis Kelamin', user.gender),
-          _buatInfoBaris('Alamat Lengkap', user.alamat, isLast: true),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Informasi Pribadi', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.teal)),
+        const SizedBox(height: 12),
+        _tileInfo(Icons.phone, 'Telepon', user.nomorTelepon),
+        _tileInfo(Icons.location_on, 'Alamat', user.alamat),
+        _tileInfo(Icons.location_city, 'Kota Asal', user.kotaAsal),
+      ],
     );
   }
 
-  Widget _buatInfoBaris(String label, String nilai, {bool isLast = false}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-          const SizedBox(height: 4),
-          Text(
-            nilai,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: Colors.black87,
-            ),
-          ),
-          const SizedBox(height: 4),
-          if (!isLast)
-            const Divider(height: 10, color: Colors.grey, thickness: 0.5),
-        ],
-      ),
+  Widget _tileInfo(IconData ikon, String label, String isi) {
+    return ListTile(
+      leading: Icon(ikon, color: Colors.teal),
+      title: Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+      subtitle: Text(isi.isNotEmpty ? isi : '-', style: const TextStyle(fontSize: 16, color: Colors.black87)),
+      contentPadding: EdgeInsets.zero,
     );
   }
 
-  Widget _buatMenuAksi(BuildContext context) {
+  Widget _buatMenuAksi() {
     return Column(
       children: [
-        MenuItemProfil(
-          ikon: Icons.headphones,
-          judul: 'Bantuan (Dukungan)',
-          deskripsi: 'Pusat bantuan untuk pertanyaan',
-          warna: Colors.teal.shade400,
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (c) => const UnderConstructionPage()),
-            );
-          },
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () {}, // Tambahkan navigasi Edit Profil jika diperlukan
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.teal, padding: const EdgeInsets.symmetric(vertical: 15), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+            child: const Text('Edit Profil', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          ),
         ),
-        MenuItemProfil(
-          ikon: Icons.people,
-          judul: 'Tentang Kami',
-          deskripsi: 'Ketahui lebih lanjut tentang pengembang aplikasi',
-          warna: Colors.teal.shade400,
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (c) => const UnderConstructionPage()),
-            );
-          },
-        ),
-        const SizedBox(height: 20),
-
-        // --- LOGOUT LOGIC ---
-        MenuItemProfil(
-          ikon: Icons.logout,
-          judul: 'Keluar (Log Out)',
-          deskripsi: 'Keluar dari akun Anda saat ini',
-          warna: Colors.red.shade600,
-          onTap: () {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => const LoginScreen()),
-              (route) => false,
-            );
-          },
-        ),
-        const SizedBox(height: 20),
-        MenuItemProfil(
-          ikon: Icons.delete_forever,
-          judul: 'Hapus Akun',
-          deskripsi: 'Hapus akun Anda secara permanen',
-          warna: Colors.red.shade700,
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (c) => const UnderConstructionPage()),
-            );
-          },
-          border: true,
+        const SizedBox(height: 12),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton(
+            onPressed: _handleLogout,
+            style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.red), padding: const EdgeInsets.symmetric(vertical: 15), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+            child: const Text('Keluar Akun', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+          ),
         ),
       ],
     );

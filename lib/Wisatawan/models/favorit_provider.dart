@@ -1,33 +1,17 @@
 import 'package:flutter/material.dart';
-
-class DestinasiSederhana {
-  final String nama;
-  final String lokasi;
-  final double rating;
-  final int ulasan;
-  final int harga;
-  final String asetGambar;
-
-  DestinasiSederhana({
-    required this.nama, required this.lokasi, required this.rating,
-    required this.ulasan, required this.harga, required this.asetGambar,
-  });
-}
+import 'destinasi_model.dart'; // Gunakan model tunggal
 
 class FavoritProvider extends ChangeNotifier {
-  final List<DestinasiSederhana> _daftarFavorit = [];
+  final List<Destinasi> _daftarFavorit = [];
+  List<Destinasi> get daftarFavorit => _daftarFavorit;
 
-  List<DestinasiSederhana> get daftarFavorit => _daftarFavorit;
-
-  bool apakahTersimpan(String namaDestinasi) {
-    return _daftarFavorit.any((item) => item.nama == namaDestinasi);
+  bool apakahTersimpan(int idDestinasi) {
+    return _daftarFavorit.any((item) => item.id == idDestinasi);
   }
 
-  void tambahkanHapusFavorit(DestinasiSederhana destinasi) {
-    bool isExist = apakahTersimpan(destinasi.nama);
-
-    if (isExist) {
-      _daftarFavorit.removeWhere((item) => item.nama == destinasi.nama);
+  void tambahkanHapusFavorit(Destinasi destinasi) {
+    if (apakahTersimpan(destinasi.id)) {
+      _daftarFavorit.removeWhere((item) => item.id == destinasi.id);
     } else {
       _daftarFavorit.add(destinasi);
     }

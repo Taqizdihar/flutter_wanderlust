@@ -1,23 +1,41 @@
 class UserModel {
+  final int idUser;
+  final int idWisatawan;
   final String nama;
   final String email;
   final String nomorTelepon;
   final String tanggalLahir;
   final String gender;
   final String alamat;
-  final int totalKunjungan;
-  final double totalPengeluaran;
-  final String asetProfil; 
+  final String kotaAsal;
+  final String fotoProfil;
 
   const UserModel({
+    required this.idUser,
+    required this.idWisatawan,
     required this.nama,
     required this.email,
     required this.nomorTelepon,
     required this.tanggalLahir,
     required this.gender,
     required this.alamat,
-    this.totalKunjungan = 0,
-    this.totalPengeluaran = 0.0,
-    required this.asetProfil,
+    required this.kotaAsal,
+    required this.fotoProfil,
   });
+
+  // Fungsi untuk memetakan JSON dari Laravel (Response gabungan User & Wisatawan)
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      idUser: json['id_user'] ?? 0,
+      idWisatawan: json['id_wisatawan'] ?? 0,
+      nama: json['nama'] ?? '',
+      email: json['email'] ?? '',
+      nomorTelepon: json['nomor_telepon'] ?? '',
+      tanggalLahir: json['tanggal_lahir'] ?? '',
+      gender: json['jenis_kelamin'] ?? '', // Mapping dari Wisatawan.php
+      alamat: json['alamat'] ?? '',
+      kotaAsal: json['kota_asal'] ?? '',
+      fotoProfil: json['foto_profil'] ?? 'https://i.pravatar.cc/300',
+    );
+  }
 }

@@ -42,9 +42,21 @@ class _LoginScreenState extends State<LoginScreen> {
           MaterialPageRoute(builder: (context) => DashboardPage(userId: userData['id_user'], ptwId: userData['id_ptw'])),
         );
       } else if (peran == 'administrator') {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AdminDashboardPage()));
+          Navigator.pushReplacement(
+            context, 
+            MaterialPageRoute(builder: (context) => const AdminDashboardPage())
+          );
       } else if (peran == 'wisatawan') {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const RootScreen()));
+          // Navigasi ke RootScreen dengan membawa data identitas
+          Navigator.pushReplacement(
+            context, 
+            MaterialPageRoute(
+              builder: (context) => RootScreen(
+                userId: userData['id_user'], 
+                idWisatawan: userData['id_wisatawan'],
+              )
+            ),
+          );
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
