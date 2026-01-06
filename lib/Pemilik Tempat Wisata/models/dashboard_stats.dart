@@ -15,15 +15,14 @@ class DashboardStats {
     required this.avgOrderValue,
   });
 
-  // Fungsi untuk memetakan JSON simulasi ke objek statistik
   factory DashboardStats.fromJson(Map<String, dynamic> json) {
     return DashboardStats(
-      totalIncome: "25.000.000", // Simulasi data tetap
-      totalVisitors: "205",
-      ticketSold: "298",
-      totalProperties: "3",
-      totalClicks: "1468",
-      avgOrderValue: "83.892",
+      totalIncome: json['total_income'] ?? "0",
+      totalVisitors: json['total_visitors'] ?? "0",
+      ticketSold: json['ticket_sold'] ?? "0",
+      totalProperties: json['total_properties'] ?? "0",
+      totalClicks: json['total_clicks'] ?? "0",
+      avgOrderValue: json['avg_order_value'] ?? "0",
     );
   }
 }

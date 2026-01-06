@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http; // Import HTTP
-import 'dart:convert';
 import 'dashboardPTW.dart';
 import 'profilePTW.dart';
-import 'models/property_ptw.dart'; // Import Model
+import 'models/property_ptw.dart';
+import 'services/api_service.dart'; //
 
 class PropertiesPage extends StatefulWidget {
   const PropertiesPage({super.key});
@@ -14,31 +13,24 @@ class PropertiesPage extends StatefulWidget {
 
 class _PropertiesPageState extends State<PropertiesPage> {
   int _selectedIndex = 1;
-  List<PropertyPTW> _properties = []; // List penampung data dari HTTP
-  bool _isLoading = true; // Status loading
+  List<PropertyPTW> _properties = [];
+  bool _isLoading = true;
+  final ApiService _apiService = ApiService();
 
   @override
   void initState() {
     super.initState();
-    _fetchData(); // Panggil fungsi HTTP saat halaman dibuka
+    _loadProperties();
   }
 
-  // --- HTTP GET REQUEST (Syarat 1: HTTP Pertama) ---
-  Future<void> _fetchData() async {
-    try {
-      final response = await http.get(
-        Uri.parse('https://jsonplaceholder.typicode.com/posts?_limit=5'),
-      );
-
-      if (response.statusCode == 200) {
-        List<dynamic> data = jsonDecode(response.body);
-        setState(() {
-          _properties = data.map((json) => PropertyPTW.fromJson(json)).toList();
-          _isLoading = false;
-        });
-      }
-    } catch (e) {
-      debugPrint("Error: $e");
+  Future<void> _loadProperties() async {
+    // Diasumsikan ID PTW adalah 1
+    final data = await _apiService.getProperties(1); 
+    if (mounted) {
+      setState(() {
+        _properties = data;
+        _isLoading = false;
+      });
     }
   }
 
@@ -57,7 +49,6 @@ class _PropertiesPageState extends State<PropertiesPage> {
       body: SafeArea(
         child: Column(
           children: [
-            // --- HEADER & BUTTONS (Tetap di atas, tidak ikut scroll) ---
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
@@ -68,18 +59,16 @@ class _PropertiesPageState extends State<PropertiesPage> {
                 ],
               ),
             ),
-
-            // --- LIST VIEW (Syarat 2: ListView.builder) ---
             Expanded(
               child: _isLoading
                   ? const Center(child: CircularProgressIndicator())
-                  : ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                      itemCount: _properties.length,
-                      itemBuilder: (context, index) {
-                        return _buildPropertyCard(_properties[index]);
-                      },
-                    ),
+                  : _properties.isEmpty
+                      ? const Center(child: Text("Anda belum memiliki properti"))
+                      : ListView.builder(
+                          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                          itemCount: _properties.length,
+                          itemBuilder: (context, index) => _buildPropertyCard(_properties[index]),
+                        ),
             ),
           ],
         ),
@@ -88,8 +77,9 @@ class _PropertiesPageState extends State<PropertiesPage> {
     );
   }
 
-  // --- REFACTORING WIDGETS UNTUK EFISIENSI ---
-
+  // ... (Widget helper _buildHeader, _buildActionBar, _buildPropertyCard tetap sama)
+  // Pastikan _buildPropertyCard menggunakan field dari model PropertyPTW yang baru
+  
   Widget _buildHeader() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -104,87 +94,46 @@ class _PropertiesPageState extends State<PropertiesPage> {
   }
 
   Widget _buildActionBar() {
-    return Row(
-      children: [
-        Expanded(
-          child: ElevatedButton.icon(
-            onPressed: () {},
-            icon: const Icon(Icons.add_circle_outline, color: Colors.white),
-            label: const Text("Add new property", style: TextStyle(color: Colors.white, fontSize: 16)),
-            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF00838F), padding: const EdgeInsets.symmetric(vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Container(
-          decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-          child: IconButton(onPressed: () {}, icon: const Icon(Icons.search, color: Colors.grey)),
-        ),
-      ],
-    );
+    return Row(children: [
+      Expanded(child: ElevatedButton.icon(onPressed: () {}, icon: const Icon(Icons.add_circle_outline, color: Colors.white), label: const Text("Add new property", style: TextStyle(color: Colors.white, fontSize: 16)), style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF00838F), padding: const EdgeInsets.symmetric(vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))))),
+      const SizedBox(width: 12),
+      Container(decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle), child: IconButton(onPressed: () {}, icon: const Icon(Icons.search, color: Colors.grey))),
+    ]);
   }
 
   Widget _buildPropertyCard(PropertyPTW property) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 16), padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(color: const Color(0xFF26C6DA), borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 8, offset: const Offset(0, 4))]),
-      child: Column(
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(borderRadius: BorderRadius.circular(12), child: Image.network(property.imageUrl, width: 80, height: 80, fit: BoxFit.cover)),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(property.name, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
-                    const SizedBox(height: 8),
-                    _buildStatRow(property),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          _buildCardButtons(),
-        ],
-      ),
+      child: Column(children: [
+        Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          ClipRRect(borderRadius: BorderRadius.circular(12), child: Image.network(property.imageUrl, width: 80, height: 80, fit: BoxFit.cover)),
+          const SizedBox(width: 16),
+          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(property.name, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
+            Text(property.location, style: const TextStyle(color: Colors.white70, fontSize: 12)),
+            const SizedBox(height: 8),
+            Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2), decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(4)), child: Text(property.status, style: const TextStyle(color: Colors.white, fontSize: 10))),
+          ])),
+        ]),
+        const SizedBox(height: 12),
+        _buildCardButtons(),
+      ]),
     );
-  }
-
-  Widget _buildStatRow(PropertyPTW p) {
-    return Column(
-      children: [
-        Row(children: [_buildSmallStat(Icons.confirmation_number, "${p.tickets} tickets"), const SizedBox(width: 12), _buildSmallStat(Icons.favorite, "${p.favorites} favs")]),
-        const SizedBox(height: 4),
-        Row(children: [_buildSmallStat(Icons.monetization_on, "${p.sold} sold"), const SizedBox(width: 12), _buildSmallStat(Icons.touch_app, "${p.clicks} clicks")]),
-      ],
-    );
-  }
-
-  Widget _buildSmallStat(IconData icon, String text) {
-    return Row(children: [Icon(icon, color: Colors.white, size: 12), const SizedBox(width: 4), Text(text, style: const TextStyle(color: Colors.white, fontSize: 10))]);
   }
 
   Widget _buildCardButtons() {
-    return Row(
-      children: [
-        Expanded(child: ElevatedButton(onPressed: () {}, style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF006064), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))), child: const Text("Actions", style: TextStyle(color: Colors.white)))),
-        const SizedBox(width: 16),
-        Expanded(child: OutlinedButton(onPressed: () {}, style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.white, width: 2), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))), child: const Text("View", style: TextStyle(color: Colors.white)))),
-      ],
-    );
+    return Row(children: [
+      Expanded(child: ElevatedButton(onPressed: () {}, style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF006064), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))), child: const Text("Actions", style: TextStyle(color: Colors.white)))),
+      const SizedBox(width: 16),
+      Expanded(child: OutlinedButton(onPressed: () {}, style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.white, width: 2), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))), child: const Text("View", style: TextStyle(color: Colors.white)))),
+    ]);
   }
 
   Widget _buildBottomNav() {
     return BottomNavigationBar(
       items: const [BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'), BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Properties'), BottomNavigationBarItem(icon: Icon(Icons.account_balance_wallet), label: 'Account')],
-      currentIndex: _selectedIndex,
-      selectedItemColor: const Color(0xFF00838F),
-      onTap: _onItemTapped,
-      backgroundColor: Colors.white,
+      currentIndex: _selectedIndex, selectedItemColor: const Color(0xFF00838F), onTap: _onItemTapped, backgroundColor: Colors.white,
     );
   }
 }
