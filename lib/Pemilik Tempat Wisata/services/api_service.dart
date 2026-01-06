@@ -5,12 +5,15 @@ import '../models/dashboard_stats.dart';
 
 class ApiService {
   // Gunakan IP Laptop Anda, jangan 'localhost' jika pakai Emulator
-  static const String baseUrl = 'http://localhost/api/flutter';
+  static const String baseUrl = 'http://192.168.100.39:8000/api/flutter';
 
   Future<Map<String, dynamic>?> login(String email, String password) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/login'),
+        headers: {
+          'Accept': 'application/json',
+        },
         body: {
           'email': email,
           'password': password,
