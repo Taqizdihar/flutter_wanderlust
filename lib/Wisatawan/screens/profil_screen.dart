@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:flutter/material.dart';
 import '../models/user_model.dart'; //
 import '../services/api_service.dart'; //
@@ -96,10 +98,10 @@ class _ProfilScreenState extends State<ProfilScreen> {
         CircleAvatar(
           radius: 60,
           backgroundColor: Colors.teal.shade100,
-          backgroundImage: (user.fotoProfil != null && user.fotoProfil!.isNotEmpty) 
-              ? NetworkImage(user.fotoProfil!) 
+          backgroundImage: (user.fotoProfil != null && user.fotoProfil.isNotEmpty) 
+              ? NetworkImage(user.fotoProfil) 
               : null,
-          child: (user.fotoProfil == null || user.fotoProfil!.isEmpty) 
+          child: (user.fotoProfil == null || user.fotoProfil.isEmpty) 
               ? const Icon(Icons.person, size: 60, color: Colors.teal) 
               : null,
         ),
