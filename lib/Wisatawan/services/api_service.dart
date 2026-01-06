@@ -105,7 +105,7 @@ class ApiService {
   }
 
   Future<Map<String, dynamic>?> getUserProfile(int userId) async {
-    final uri = Uri.parse('$_baseUrl/api/users/$userId'); // sesuaikan endpoint
+    final uri = Uri.parse('$_baseUrl/profile/$userId'); // sesuaikan endpoint
     try {
       final response = await http.get(
         uri,
