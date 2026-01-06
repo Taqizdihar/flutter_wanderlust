@@ -13,12 +13,17 @@ class ApiService {
         Uri.parse('$baseUrl/login'),
         headers: {
           'Accept': 'application/json',
+          'Content-Type': 'application/json', // Tambahkan ini
         },
-        body: {
+        // Gunakan jsonEncode agar data dikirim sebagai JSON murni, bukan form-data
+        body: jsonEncode({
           'email': email,
           'password': password,
-        },
+        }),
       );
+
+      print("Response Status: ${response.statusCode}");
+      print("Response Body: ${response.body}");
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
