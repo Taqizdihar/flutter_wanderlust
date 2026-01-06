@@ -5,7 +5,9 @@ import 'models/property_ptw.dart';
 import 'services/api_service.dart'; //
 
 class PropertiesPage extends StatefulWidget {
-  const PropertiesPage({super.key});
+  final int userId; // Tambahkan parameter
+  final int ptwId;
+  const PropertiesPage({super.key, required this.userId, required this.ptwId});
 
   @override
   State<PropertiesPage> createState() => _PropertiesPageState();
@@ -25,7 +27,7 @@ class _PropertiesPageState extends State<PropertiesPage> {
 
   Future<void> _loadProperties() async {
     // Diasumsikan ID PTW adalah 1
-    final data = await _apiService.getProperties(1); 
+    final data = await _apiService.getProperties(widget.ptwId); 
     if (mounted) {
       setState(() {
         _properties = data;
@@ -36,7 +38,12 @@ class _PropertiesPageState extends State<PropertiesPage> {
 
   void _onItemTapped(int index) {
     if (index == 0) {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const DashboardPage()));
+      Navigator.pushReplacement(
+        context, 
+        MaterialPageRoute(
+          builder: (context) => DashboardPage(userId: widget.userId, ptwId: widget.ptwId)
+        )
+      );
     } else if (index == 2) {
       Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfilePage()));
     }

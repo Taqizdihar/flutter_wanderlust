@@ -7,6 +7,25 @@ class ApiService {
   // Gunakan IP Laptop Anda, jangan 'localhost' jika pakai Emulator
   static const String baseUrl = 'http://localhost/api/flutter';
 
+  Future<Map<String, dynamic>?> login(String email, String password) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/login'),
+        body: {
+          'email': email,
+          'password': password,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      }
+    } catch (e) {
+      print("Login Error: $e");
+    }
+    return null;
+  }
+
   // --- 1. Ambil Data Statistik Dashboard ---
   Future<DashboardStats?> getDashboardStats(int idPTW) async {
     try {

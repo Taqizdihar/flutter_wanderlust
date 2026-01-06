@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'Pemilik Tempat Wisata/dashboardPTW.dart';
 import 'Administrator/dashboard.dart';
 import 'Wisatawan/screens/root_screen.dart';
+import 'Pemilik Tempat Wisata/services/api_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,40 +14,41 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _userController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
+  final ApiService _apiService = ApiService();
 
-  void _handleLogin() {
-    String user = _userController.text;
+  void _handleLogin() async {
+    String email = _userController.text;
     String pass = _passController.text;
 
-    Widget? targetPage;
+    // Tampilkan loading snackbar
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Authenticating..."), duration: Duration(seconds: 1)),
+    );
 
-    if (user == 'alnilambda' && pass == '123') {
-      targetPage = const DashboardPage();
-    } else if (user == 'riska' && pass == '123') {
-      targetPage = const AdminDashboardPage();
-    } else if (user == 'faiz' && pass == '123') {
-      targetPage = const RootScreen();
-    }
+    final response = await _apiService.login(email, pass);
 
-    if (targetPage != null) {
+    if (response != null && response['success'] == true) {
+      final userData = response['user'];
+      final String peran = userData['peran'];
+
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Login Successful"),
-          backgroundColor: Colors.teal,
-          duration: Duration(seconds: 2),
-        ),
+        const SnackBar(content: Text("Login Successful"), backgroundColor: Colors.teal),
       );
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => targetPage!),
-      );
+      // Navigasi berdasarkan peran
+      if (peran == 'pemilik') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => DashboardPage(userId: userData['id_user'], ptwId: userData['id_ptw'])),
+        );
+      } else if (peran == 'administrator') {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AdminDashboardPage()));
+      } else if (peran == 'wisatawan') {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const RootScreen()));
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Username atau Password salah!"),
-          backgroundColor: Colors.red,
-        ),
+        const SnackBar(content: Text("Email atau Password salah!"), backgroundColor: Colors.red),
       );
     }
   }

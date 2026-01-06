@@ -5,7 +5,9 @@ import 'models/dashboard_stats.dart';
 import 'services/api_service.dart'; //
 
 class DashboardPage extends StatefulWidget {
-  const DashboardPage({super.key});
+  final int userId;
+  final int ptwId;
+  const DashboardPage({super.key, required this.userId, required this.ptwId});
 
   @override
   State<DashboardPage> createState() => _DashboardPageState();
@@ -26,7 +28,7 @@ class _DashboardPageState extends State<DashboardPage> {
   // --- MENGGUNAKAN API SERVICE ---
   Future<void> _loadData() async {
     // Diasumsikan ID PTW adalah 1 (Sesuaikan dengan data di DB Laravel Anda)
-    final data = await _apiService.getDashboardStats(1); 
+    final data = await _apiService.getDashboardStats(widget.ptwId); 
     if (mounted) {
       setState(() {
         _stats = data;
@@ -37,7 +39,15 @@ class _DashboardPageState extends State<DashboardPage> {
 
   void _onItemTapped(int index) {
     if (index == 1) {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const PropertiesPage()));
+      Navigator.pushReplacement(
+        context, 
+        MaterialPageRoute(
+          builder: (context) => PropertiesPage(
+            userId: widget.userId, // Teruskan ID ke halaman properti
+            ptwId: widget.ptwId,
+          )
+        )
+      );
     } else if (index == 2) {
       Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfilePage()));
     }
