@@ -1,119 +1,92 @@
 import 'package:flutter/material.dart';
-import '../login.dart';
+import 'edit_profile.dart';
 
 class AdminProfilePage extends StatelessWidget {
   const AdminProfilePage({super.key});
 
-  final Color mainColor = const Color(0xFF0A6A84);
+  final Color primaryColor = const Color(0xFF0A6A84);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        title: const Text("Admin Profile"),
+        backgroundColor: primaryColor,
         elevation: 0,
-        leading: IconButton(
-          icon: Container(
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: mainColor, width: 2),
-            ),
-            child: Icon(Icons.arrow_back, color: mainColor, size: 18),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () {
+              // --- PINDAH KE HALAMAN EDIT (Gacor Beb!) ---
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const EditProfilePage(),
+                ),
+              );
+            },
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        ],
       ),
-
-      body: SafeArea(
+      body: SingleChildScrollView(
         child: Column(
           children: [
-            const Spacer(flex: 1),
-
+            // Bagian Header Profile
             Container(
-              padding: const EdgeInsets.all(4),
+              height: 150,
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: mainColor, width: 3),
+                color: primaryColor,
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                ),
               ),
-              child: const CircleAvatar(
-                radius: 80,
-                backgroundImage: AssetImage("assets/images/man 2.jpg"),
+              child: const Center(
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundColor: Colors.white,
+                  child: CircleAvatar(
+                    radius: 46,
+                    backgroundImage: AssetImage("assets/images/profile.jpeg"),
+                  ),
+                ),
               ),
             ),
-
             const SizedBox(height: 20),
 
-            Text(
-              "Administrator",
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: mainColor,
-              ),
+            // Detail Informasi (Tampilan tetap cantik seperti permintaanmu)
+            _profileItem(Icons.person, "Nama Lengkap", "Riska Dea Bakri"),
+            _profileItem(Icons.email, "Email", "riska.dea@admin.com"),
+            _profileItem(
+              Icons.location_on,
+              "Alamat",
+              "Jl. Properti No. 123, Bandung",
             ),
-
-            const Spacer(flex: 2),
-
-            const Divider(color: Colors.red, thickness: 1.5),
-
-            InkWell(
-              onTap: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
-                  (route) => false,
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24.0,
-                  vertical: 20.0,
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.exit_to_app, color: Colors.red, size: 32),
-                    const SizedBox(width: 16),
-
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          "Log Out",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          "Log out from your account",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.redAccent,
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const Spacer(),
-
-                    const Icon(
-                      Icons.arrow_forward_ios,
-                      color: Colors.red,
-                      size: 20,
-                    ),
-                  ],
-                ),
-              ),
+            _profileItem(
+              Icons.description,
+              "Deskripsi",
+              "Head Administrator untuk Manajemen Properti wilayah Jawa Barat.",
             ),
-
-            const SizedBox(height: 10),
+            _profileItem(Icons.phone, "Nomor Telepon", "+62 812-3456-7890"),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _profileItem(IconData icon, String label, String value) {
+    return ListTile(
+      leading: Icon(icon, color: primaryColor),
+      title: Text(
+        label,
+        style: const TextStyle(fontSize: 14, color: Colors.grey),
+      ),
+      subtitle: Text(
+        value,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Colors.black87,
         ),
       ),
     );

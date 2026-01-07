@@ -12,6 +12,7 @@ class OwnerVerificationPage extends StatefulWidget {
 class _OwnerVerificationPageState extends State<OwnerVerificationPage> {
   final Color mainColor = const Color(0xFF0A6A84);
   String currentStatus = "";
+  
 
   @override
   void initState() {
@@ -34,10 +35,7 @@ class _OwnerVerificationPageState extends State<OwnerVerificationPage> {
         title: Text(
           "Owner Identity Verification",
           style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: mainColor,
-          ),
+              fontSize: 20, fontWeight: FontWeight.bold, color: mainColor),
         ),
       ),
 
@@ -56,10 +54,7 @@ class _OwnerVerificationPageState extends State<OwnerVerificationPage> {
             Text(
               widget.ownerData["name"],
               style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: mainColor,
-              ),
+                  fontSize: 20, fontWeight: FontWeight.bold, color: mainColor),
             ),
 
             SizedBox(height: 20),
@@ -69,9 +64,8 @@ class _OwnerVerificationPageState extends State<OwnerVerificationPage> {
             buildDetail("Phone Number", "0898-7654-321"),
 
             buildDetail(
-              "Business Address",
-              "Jl. Kemakmuran Bangsa No. 9, Pehape, Malabari, Bandung, Jawa Barat, Indonesia.",
-            ),
+                "Business Address",
+                "Jl. Kemakmuran Bangsa No. 9, Pehape, Malabari, Bandung, Jawa Barat, Indonesia."),
 
             SizedBox(height: 20),
 
@@ -81,31 +75,31 @@ class _OwnerVerificationPageState extends State<OwnerVerificationPage> {
 
             SizedBox(height: 30),
 
+            // ===== APPROVE BUTTON =====
             ElevatedButton(
               onPressed: () {
                 setState(() => currentStatus = "Active");
                 Navigator.pop(context, "Active");
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                minimumSize: Size(double.infinity, 50),
-              ),
+                  backgroundColor: Colors.green,
+                  minimumSize: Size(double.infinity, 50)),
               child: Text("Approve", style: TextStyle(fontSize: 18)),
             ),
 
             SizedBox(height: 14),
 
+            // ===== REVISION BUTTON =====
             ElevatedButton(
               onPressed: () {
                 setState(() => currentStatus = "Revision");
                 Navigator.pop(context, "Revision");
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                minimumSize: Size(double.infinity, 50),
-              ),
+                  backgroundColor: Colors.red,
+                  minimumSize: Size(double.infinity, 50)),
               child: Text("Revision", style: TextStyle(fontSize: 18)),
-            ),
+            )
           ],
         ),
       ),
@@ -118,21 +112,13 @@ class _OwnerVerificationPageState extends State<OwnerVerificationPage> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "$title:",
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: mainColor,
-            ),
-          ),
+          Text("$title:",
+              style: TextStyle(
+                  fontSize: 16, fontWeight: FontWeight.bold, color: mainColor)),
           SizedBox(width: 10),
           Expanded(
-            child: Text(
-              value,
-              style: TextStyle(fontSize: 16, color: Colors.black87),
-            ),
-          ),
+              child:
+                  Text(value, style: TextStyle(fontSize: 16, color: Colors.black87))),
         ],
       ),
     );
@@ -142,14 +128,12 @@ class _OwnerVerificationPageState extends State<OwnerVerificationPage> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       decoration: BoxDecoration(
-        color: mainColor,
-        borderRadius: BorderRadius.circular(12),
-      ),
+          color: mainColor, borderRadius: BorderRadius.circular(12)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(text, style: TextStyle(color: Colors.white, fontSize: 16)),
-          Icon(Icons.open_in_new, color: Colors.white),
+          Icon(Icons.open_in_new, color: Colors.white)
         ],
       ),
     );

@@ -28,53 +28,79 @@ class PropertyVerificationPage extends StatelessWidget {
                 child: Text(
                   "Property Verification",
                   style: TextStyle(
-                      fontSize: 24,
-                      color: Color(0xFF0A6A84),
-                      fontWeight: FontWeight.bold),
+                    fontSize: 24,
+                    color: Color(0xFF0A6A84),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
 
+              // --- BAGIAN DUA FOTO (Sudah ditambahkan foto kedua beb!) ---
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+                  // FOTO PERTAMA
                   Container(
-                    height: 100,
-                    width: 120,
+                    width: 150,
+                    height: 150,
                     decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(15),
+                      image: DecorationImage(
+                        image: AssetImage(property.imagePath), 
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
+                  
+                  // FOTO KEDUA (Menggantikan kotak abu-abu sebelumnya)
                   Container(
-                    height: 100,
-                    width: 120,
+                    width: 150,
+                    height: 150,
                     decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(15),
+                      image: DecorationImage(
+                        image: AssetImage(property.imagePath2), // <--- Mengambil imagePath2
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ],
               ),
-
               const SizedBox(height: 20),
 
-              Text("Name: ${property.name}",
-                  style: const TextStyle(fontSize: 18)),
-              Text("Category: ${property.category}",
-                  style: const TextStyle(fontSize: 18)),
-              Text("Hours: ${property.hours}",
-                  style: const TextStyle(fontSize: 18)),
-              Text("Ticket Price: ${property.price}",
-                  style: const TextStyle(fontSize: 18)),
-              Text("Ticket Quota: ${property.quota}",
-                  style: const TextStyle(fontSize: 18)),
-              Text("Address: ${property.address}",
-                  style: const TextStyle(fontSize: 18)),
-              Text("Description: ${property.description}",
-                  style: const TextStyle(fontSize: 18)),
-              Text("PIC Number: ${property.picNumber}",
-                  style: const TextStyle(fontSize: 18)),
+              Text(
+                "Name: ${property.name}",
+                style: const TextStyle(fontSize: 18),
+              ),
+              Text(
+                "Category: ${property.category}",
+                style: const TextStyle(fontSize: 18),
+              ),
+              Text(
+                "Hours: ${property.hours}",
+                style: const TextStyle(fontSize: 18),
+              ),
+              Text(
+                "Ticket Price: ${property.price}",
+                style: const TextStyle(fontSize: 18),
+              ),
+              Text(
+                "Ticket Quota: ${property.quota}",
+                style: const TextStyle(fontSize: 18),
+              ),
+              Text(
+                "Address: ${property.address}",
+                style: const TextStyle(fontSize: 18),
+              ),
+              Text(
+                "Description: ${property.description}",
+                style: const TextStyle(fontSize: 18),
+              ),
+              Text(
+                "PIC Number: ${property.picNumber}",
+                style: const TextStyle(fontSize: 18),
+              ),
 
               const SizedBox(height: 30),
 
@@ -86,8 +112,7 @@ class PropertyVerificationPage extends StatelessWidget {
                   backgroundColor: Colors.green,
                   minimumSize: const Size(double.infinity, 50),
                 ),
-                child: const Text("Approve",
-                    style: TextStyle(fontSize: 18)),
+                child: const Text("Approve", style: TextStyle(fontSize: 18, color: Colors.white)),
               ),
 
               const SizedBox(height: 15),
@@ -100,8 +125,7 @@ class PropertyVerificationPage extends StatelessWidget {
                   backgroundColor: Colors.red,
                   minimumSize: const Size(double.infinity, 50),
                 ),
-                child: const Text("Revision",
-                    style: TextStyle(fontSize: 18)),
+                child: const Text("Revision", style: TextStyle(fontSize: 18, color: Colors.white)),
               ),
             ],
           ),

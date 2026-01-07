@@ -9,6 +9,8 @@ class PropertyModel {
   String address;
   String description;
   String picNumber;
+  final String imagePath;
+  final String imagePath2;
 
   PropertyModel({
     required this.name,
@@ -21,5 +23,7 @@ class PropertyModel {
     required this.address,
     required this.description,
     required this.picNumber,
+    required this.imagePath,
+    required this.imagePath2,
   });
 }
