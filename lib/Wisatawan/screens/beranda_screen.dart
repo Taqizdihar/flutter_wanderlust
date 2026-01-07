@@ -1,185 +1,186 @@
 import 'package:flutter/material.dart';
-import '../widget/kartu_destinasi.dart';
-import 'profil_screen.dart';
-import 'pencarian_screen.dart';
-import '../models/destinasi_model.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../services/api_service.dart';
+import '../models/favorit_provider.dart';
+import '../models/destinasi_model.dart';
 
-class BerandaScreen extends StatefulWidget {
-  final int userId;
-  final int idWisatawan;
-  
-  const BerandaScreen({
+class KartuDestinasi extends StatelessWidget {
+  final String id;
+  final String nama;
+  final String lokasi;
+  final double rating;
+  final int ulasan;
+  final int harga;
+  final String asetGambar;
+  final String deskripsi;
+  final bool apakahListTile;
+  final int? idWisatawan;
+
+  const KartuDestinasi({
     super.key,
-    required this.userId,
-    required this.idWisatawan,
+    required this.id,
+    required this.nama,
+    required this.lokasi,
+    required this.rating,
+    required this.ulasan,
+    required this.harga,
+    required this.asetGambar,
+    required this.deskripsi,
+    this.apakahListTile = false,
+    this.idWisatawan,
   });
 
-  @override
-  State<BerandaScreen> createState() => _BerandaScreenState();
-}
+  void _tampilkanDetail(BuildContext context) {
+    final formatCurrency = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0);
 
-class _BerandaScreenState extends State<BerandaScreen> {
-  late Future<List<Destinasi>> _futureDestinasi;
-  final ApiService _apiService = ApiService();
-
-  @override
-  void initState() {
-    super.initState();
-    _futureDestinasi = _apiService.fetchDestinasi();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(nama, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 10),
+              Text(deskripsi, style: const TextStyle(fontSize: 14, color: Colors.black87)),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(formatCurrency.format(harga), style: const TextStyle(fontSize: 18, color: Colors.teal, fontWeight: FontWeight.bold)),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Mohon maaf, saat ini tiket belum tersedia"),
+                          backgroundColor: Colors.redAccent,
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.teal, foregroundColor: Colors.white),
+                    child: const Text('Pesan Sekarang'),
+                  )
+                ],
+              )
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: RefreshIndicator(
-        onRefresh: () async {
-          setState(() {
-            _futureDestinasi = _apiService.fetchDestinasi();
-          });
-        },
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _bangunHeaderAestetik(context),
-              const SizedBox(height: 10),
-              _bangunJudulBagian(context, 'Destinasi Terpopuler (Live Data)'),
+    final favoritProvider = Provider.of<FavoritProvider>(context);
+    bool isSaved = favoritProvider.apakahTersimpan(int.parse(id));
 
-              FutureBuilder<List<Destinasi>>(
-                future: _futureDestinasi,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const SizedBox(
-                      height: 280,
-                      child: Center(child: CircularProgressIndicator()),
-                    );
-                  } else if (snapshot.hasError) {
-                    return SizedBox(
-                      height: 280,
-                      child: Center(child: Text('Terjadi kesalahan: ${snapshot.error}')),
-                    );
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const SizedBox(
-                      height: 280,
-                      child: Center(child: Text('Data tidak tersedia')),
-                    );
-                  }
-
-                  final listDestinasi = snapshot.data!;
-                  return SizedBox(
-                    height: 280,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      itemCount: listDestinasi.length,
-                      itemBuilder: (context, index) {
-                        final item = listDestinasi[index];
-                        return KartuDestinasi(
-                          id: item.id.toString(),
-                          nama: item.nama,
-                          lokasi: item.lokasi,
-                          rating: item.rating,
-                          ulasan: item.ulasan,
-                          harga: item.harga,
-                          asetGambar: item.gambar,
-                          deskripsi: item.deskripsi,
-                          apakahListTile: false,
-                          idWisatawan: widget.idWisatawan,
-                        );
-                      },
+    return InkWell(
+      onTap: () => _tampilkanDetail(context),
+      child: Container(
+        width: 250,
+        margin: const EdgeInsets.only(right: 15.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.15), blurRadius: 10, offset: const Offset(0, 4))],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+                  child: Image.network(
+                    asetGambar,
+                    height: 140,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      height: 140,
+                      color: Colors.grey[300],
+                      child: const Icon(Icons.image_not_supported)
                     ),
-                  );
-                },
-              ),
-              const SizedBox(height: 20),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _bangunHeaderAestetik(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(20, 60, 20, 20),
-      decoration: const BoxDecoration(
-        color: Colors.teal,
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(30),
-          bottomRight: Radius.circular(30),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Halo, Petualang!',
-                style: TextStyle(color: Colors.white70, fontSize: 16),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'Mau ke mana hari ini?',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProfilScreen(userId: widget.userId),
-                ),
-              );
-            },
-            child: const CircleAvatar(
-              radius: 25,
-              backgroundColor: Colors.white24,
-              child: Icon(Icons.person, color: Colors.white),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _bangunJudulBagian(BuildContext context, String judul) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            judul,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PencarianScreen(
-                    userId: widget.userId,
-                    idWisatawan: widget.idWisatawan,
                   ),
                 ),
-              );
-            },
-            child: const Text('Lihat Semua', style: TextStyle(color: Colors.teal)),
+                Positioned(
+                  right: 8,
+                  top: 8,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white.withOpacity(0.9),
+                    radius: 18,
+                    child: IconButton(
+                      icon: Icon(
+                        isSaved ? Icons.bookmark : Icons.bookmark_border,
+                        color: Colors.teal,
+                        size: 20,
+                      ),
+                      onPressed: () async {
+                        if (idWisatawan == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Silakan login untuk menyimpan favorit')),
+                          );
+                          return;
+                        }
+
+                        bool sukses = await ApiService().toggleBookmark(idWisatawan!, int.parse(id));
+
+                        if (sukses) {
+                          favoritProvider.tambahkanHapusFavorit(Destinasi(
+                            id: int.parse(id),
+                            nama: nama,
+                            lokasi: lokasi,
+                            rating: rating,
+                            ulasan: ulasan,
+                            harga: harga,
+                            gambar: asetGambar,
+                            deskripsi: deskripsi
+                          ));
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            _buildTextInfo(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextInfo() {
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(nama, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16), maxLines: 1, overflow: TextOverflow.ellipsis),
+          const SizedBox(height: 4),
+          Row(
+            children: [
+              const Icon(Icons.location_on, size: 14, color: Colors.teal),
+              const SizedBox(width: 4),
+              Expanded(child: Text(lokasi, style: const TextStyle(color: Colors.grey, fontSize: 12), maxLines: 1, overflow: TextOverflow.ellipsis)),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              const Icon(Icons.star, size: 14, color: Colors.amber),
+              const SizedBox(width: 4),
+              Text(rating.toString(), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+              const SizedBox(width: 4),
+              Text('($ulasan ulasan)', style: const TextStyle(color: Colors.grey, fontSize: 12)),
+            ],
           ),
         ],
       ),

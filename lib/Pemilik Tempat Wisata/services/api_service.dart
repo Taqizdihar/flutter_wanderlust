@@ -4,7 +4,6 @@ import '../models/property_ptw.dart';
 import '../models/dashboard_stats.dart';
 
 class ApiService {
-  // Gunakan IP Laptop Anda, jangan 'localhost' jika pakai Emulator
   static const String baseUrl = 'http://127.0.0.1:8000/api/flutter';
 
   Future<Map<String, dynamic>?> login(String email, String password) async {
@@ -13,9 +12,8 @@ class ApiService {
         Uri.parse('$baseUrl/login'),
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json', // Tambahkan ini
+          'Content-Type': 'application/json',
         },
-        // Gunakan jsonEncode agar data dikirim sebagai JSON murni, bukan form-data
         body: jsonEncode({
           'email': email,
           'password': password,
@@ -34,7 +32,6 @@ class ApiService {
     return null;
   }
 
-  // --- 1. Ambil Data Statistik Dashboard ---
   Future<DashboardStats?> getDashboardStats(int idPTW) async {
     try {
       final response = await http.get(Uri.parse('$baseUrl/stats/$idPTW'));
@@ -49,7 +46,6 @@ class ApiService {
     return null;
   }
 
-  // --- 2. Ambil Daftar Properti ---
   Future<List<PropertyPTW>> getProperties(int idPTW) async {
     try {
       final response = await http.get(Uri.parse('$baseUrl/properties/$idPTW'));
@@ -65,7 +61,6 @@ class ApiService {
     return [];
   }
 
-  // --- 3. Ambil Data Profil User ---
   Future<Map<String, dynamic>?> getUserProfile(int idUser) async {
     try {
       final response = await http.get(Uri.parse('$baseUrl/profile/$idUser'));
