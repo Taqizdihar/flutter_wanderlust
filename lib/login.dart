@@ -40,12 +40,10 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
 
-      // Navigasi berdasarkan peran
       if (peran == 'pemilik') {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            // Memanggil DashboardPage milik Pemilik menggunakan alias 'ptw'
             builder: (context) => ptw.DashboardPage(
               userId: userData['id_user'],
               ptwId: userData['id_ptw'],
@@ -56,7 +54,6 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            // Memanggil DashboardPage milik Ika menggunakan alias 'admin'
             builder: (context) => const admin.DashboardPage(),
           ),
         );
@@ -67,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
             builder: (context) => RootScreen(
               userId: userData['id_user'],
               idWisatawan:
-                  userData['id_wisatawan'], // Diambil dari respon Laravel
+                  userData['id_wisatawan'],
             ),
           ),
         );
@@ -135,7 +132,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // --- Widget Helper buildLogo & buildTextField tetap sama ---
   Widget _buildLogo() {
     return Container(
       width: 120,

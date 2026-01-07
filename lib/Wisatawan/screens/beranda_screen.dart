@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import '../widget/kartu_destinasi.dart';
 import 'profil_screen.dart';
 import 'pencarian_screen.dart';
-import '../models/destinasi_model.dart'; //
-import '../services/api_service.dart'; //
+import '../models/destinasi_model.dart';
+import '../services/api_service.dart';
 
 class BerandaScreen extends StatefulWidget {
   final int userId;
@@ -26,7 +26,6 @@ class _BerandaScreenState extends State<BerandaScreen> {
   @override
   void initState() {
     super.initState();
-    // Memanggil fungsi fetch yang sudah dihubungkan ke Laravel
     _futureDestinasi = _apiService.fetchDestinasi();
   }
 
@@ -85,10 +84,10 @@ class _BerandaScreenState extends State<BerandaScreen> {
                           rating: item.rating,
                           ulasan: item.ulasan,
                           harga: item.harga,
-                          asetGambar: item.gambar, // Mengambil URL dari database
+                          asetGambar: item.gambar,
                           deskripsi: item.deskripsi,
                           apakahListTile: false,
-                          idWisatawan: widget.idWisatawan, // Penting untuk fitur bookmark
+                          idWisatawan: widget.idWisatawan,
                         );
                       },
                     ),
@@ -96,7 +95,6 @@ class _BerandaScreenState extends State<BerandaScreen> {
                 },
               ),
               const SizedBox(height: 20),
-              // Tambahkan bagian pencarian atau kategori di sini jika diperlukan
             ],
           ),
         ),
@@ -140,7 +138,7 @@ class _BerandaScreenState extends State<BerandaScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ProfilScreen(userId: widget.userId), // Navigasi ke profil
+                  builder: (context) => ProfilScreen(userId: widget.userId),
                 ),
               );
             },

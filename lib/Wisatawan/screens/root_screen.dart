@@ -1,9 +1,7 @@
-// ignore_for_file: unused_import
-
 import 'package:flutter/material.dart';
 import 'beranda_screen.dart';
 import 'tersimpan_screen.dart';
-import 'tiket_screens.dart'; // Menambahkan import yang sebelumnya hilang
+import 'tiket_screens.dart';
 import 'profil_screen.dart';
 import 'pencarian_screen.dart';
 
@@ -24,24 +22,19 @@ class RootScreen extends StatefulWidget {
 class _RootScreenState extends State<RootScreen> {
   int _currentIndex = 0; 
 
-  // Menggunakan getter agar widget layar mendapatkan data terbaru dari widget utama
   List<Widget> get _screens => [
-    // Indeks 0: Beranda
     BerandaScreen(
       userId: widget.userId, 
       idWisatawan: widget.idWisatawan
-    ),
-    // Indeks 1: Tiket      
+    ),   
     TiketScreen(
       userId: widget.userId, 
       idWisatawan: widget.idWisatawan
-    ),
-    // Indeks 2: Tersimpan             
+    ),            
     TersimpanScreen(
       userId: widget.userId, 
       idWisatawan: widget.idWisatawan
-    ),
-    // Indeks 3: Placeholder untuk Ulasan / Penilaian    
+    ),   
     const SizedBox(
       child: Center(child: Text("Halaman Ulasan dalam Pengembangan")),
     ),            
@@ -56,7 +49,6 @@ class _RootScreenState extends State<RootScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Menampilkan layar berdasarkan indeks yang dipilih
       body: _screens[_currentIndex], 
       
       bottomNavigationBar: BottomNavigationBar(

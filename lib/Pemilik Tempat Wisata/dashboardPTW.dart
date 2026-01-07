@@ -18,7 +18,7 @@ class _DashboardPageState extends State<DashboardPage> {
   DashboardStats? _stats;
   bool _isLoading = true;
   String _userName = "Loading...";
-  final ApiService _apiService = ApiService(); // Inisialisasi Service
+  final ApiService _apiService = ApiService();
 
   @override
   void initState() {
@@ -26,9 +26,7 @@ class _DashboardPageState extends State<DashboardPage> {
     _loadData();
   }
 
-  // --- MENGGUNAKAN API SERVICE ---
   Future<void> _loadData() async {
-    // Diasumsikan ID PTW adalah 1 (Sesuaikan dengan data di DB Laravel Anda)
     final statData = await _apiService.getDashboardStats(widget.ptwId);
     final userData = await _apiService.getUserProfile(widget.userId);
     if (mounted) {
@@ -46,7 +44,7 @@ class _DashboardPageState extends State<DashboardPage> {
         context, 
         MaterialPageRoute(
           builder: (context) => PropertiesPage(
-            userId: widget.userId, // Teruskan ID ke halaman properti
+            userId: widget.userId,
             ptwId: widget.ptwId,
           )
         )
@@ -85,9 +83,6 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  // ... (Widget helper _buildHeader, _buildIncomeCard, dll tetap sama seperti sebelumnya)
-  // Pastikan variabel di _buildStatGrid menggunakan data dari _stats!
-  
   Widget _buildHeader() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

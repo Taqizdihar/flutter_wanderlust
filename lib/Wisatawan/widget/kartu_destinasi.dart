@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../services/api_service.dart'; //
-import '../models/favorit_provider.dart'; //
-import '../models/destinasi_model.dart'; //
+import '../services/api_service.dart';
+import '../models/favorit_provider.dart';
+import '../models/destinasi_model.dart';
 
 class KartuDestinasi extends StatelessWidget {
   final String id; 
@@ -63,8 +63,7 @@ class KartuDestinasi extends StatelessWidget {
                       }
 
                       final messenger = ScaffoldMessenger.of(context);
-                      
-                      // Memanggil API simpan pesanan tiket
+
                       bool sukses = await ApiService().simpanPesanan(
                         idWisatawan!, 
                         int.parse(id), 
@@ -149,11 +148,9 @@ class KartuDestinasi extends StatelessWidget {
                           return;
                         }
 
-                        // 1. Panggil API Toggle Bookmark terlebih dahulu
                         bool sukses = await ApiService().toggleBookmark(idWisatawan!, int.parse(id));
 
                         if (sukses) {
-                          // 2. Jika sukses di database, baru perbarui Provider lokal
                           favoritProvider.tambahkanHapusFavorit(Destinasi(
                             id: int.parse(id), 
                             nama: nama, 

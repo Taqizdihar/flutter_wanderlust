@@ -22,11 +22,9 @@ class _OwnerVerificationPageState extends State<OwnerVerificationPage> {
     currentStatus = widget.ownerData["status"];
   }
 
-  // Fungsi untuk memproses verifikasi akun pemilik ke Laravel
   void _prosesVerifikasi(String status) async {
     setState(() => _isLoading = true);
 
-    // Memperbarui status_akun di tabel users melalui API
     bool sukses = await _adminApiService.updateUserStatus(
       widget.ownerData["id_user"],
       status,
@@ -36,7 +34,6 @@ class _OwnerVerificationPageState extends State<OwnerVerificationPage> {
 
     if (sukses) {
       if (mounted) {
-        // Kembali ke list dengan status baru agar UI terupdate
         Navigator.pop(context, status);
       }
     } else {
@@ -78,7 +75,6 @@ class _OwnerVerificationPageState extends State<OwnerVerificationPage> {
                 children: [
                   CircleAvatar(
                     radius: 60,
-                    // Gambar diambil dari URL foto_profil di database
                     backgroundImage: NetworkImage(data["image"]),
                     onBackgroundImageError: (_, __) =>
                         const Icon(Icons.person, size: 60),
@@ -94,14 +90,13 @@ class _OwnerVerificationPageState extends State<OwnerVerificationPage> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Data dinamis dari database Laravel
                   buildDetail("Full Name", data["name"]),
                   buildDetail("Email", data["email"]),
                   buildDetail("Phone Number", data["phone"]),
                   buildDetail(
                     "Organization",
                     data["organization"],
-                  ), // Menampilkan nama organisasi/bisnis PTW
+                  ),
 
                   const SizedBox(height: 20),
                   buildDocumentButton("See Tax Document"),
@@ -109,7 +104,6 @@ class _OwnerVerificationPageState extends State<OwnerVerificationPage> {
                   buildDocumentButton("See Legal Business Document"),
                   const SizedBox(height: 30),
 
-                  // TOMBOL APPROVE
                   ElevatedButton(
                     onPressed: () => _prosesVerifikasi('aktif'),
                     style: ElevatedButton.styleFrom(
@@ -124,7 +118,6 @@ class _OwnerVerificationPageState extends State<OwnerVerificationPage> {
 
                   const SizedBox(height: 14),
 
-                  // TOMBOL REVISION
                   ElevatedButton(
                     onPressed: () => _prosesVerifikasi('revisi'),
                     style: ElevatedButton.styleFrom(

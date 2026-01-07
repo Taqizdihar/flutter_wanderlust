@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../login.dart';
 import '../noPage.dart';
-import 'services/api_service.dart'; //
+import 'services/api_service.dart';
 
 class ProfilePage extends StatefulWidget {
   final int userId;
@@ -23,7 +23,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _loadUserData() async {
-    // Diasumsikan ID User adalah 1 (Taqi / Pemilik)
     final data = await _apiService.getUserProfile(widget.userId);
     if (mounted) {
       setState(() {
@@ -61,13 +60,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   const SizedBox(height: 20),
                   CircleAvatar(
                     radius: 60,
-                    // PERBAIKAN: Gunakan key 'foto_profil' dan berikan fallback jika null
                     backgroundImage: NetworkImage(
                       _userData!['foto_profil'] ?? 'https://i.pravatar.cc/300',
                     ),
                   ),
                   const SizedBox(height: 16),
-                  // PERBAIKAN: Gunakan key 'nama'
                   Text(
                     _userData!['nama'] ?? 'User',
                     style: const TextStyle(
@@ -116,10 +113,8 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Column(children: [
               _buildInfoRow("Email:", _userData!['email'] ?? '-'),
               const Divider(),
-              // PERBAIKAN: Gunakan key 'nomor_telepon' sesuai Laravel
               _buildInfoRow("Phone:", _userData!['nomor_telepon'] ?? '-'),
               const Divider(),
-              // PERBAIKAN: Gunakan key 'peran' sesuai Laravel
               _buildInfoRow("Role:", _userData!['peran'] ?? '-'),
             ]),
           ),
@@ -127,8 +122,6 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-
-  // ... (Widget helper _buildBackButton, _buildEditButton, _buildInfoRow, _buildListTile, _showLogoutDialog tetap sama)
 
   Widget _buildBackButton(BuildContext context) {
     return IconButton(

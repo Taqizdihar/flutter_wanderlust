@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'dashboardPTW.dart';
 import 'profilePTW.dart';
 import 'models/property_ptw.dart';
-import 'services/api_service.dart'; //
+import 'services/api_service.dart';
 
 class PropertiesPage extends StatefulWidget {
-  final int userId; // Tambahkan parameter
+  final int userId;
   final int ptwId;
   const PropertiesPage({super.key, required this.userId, required this.ptwId});
 
@@ -26,7 +26,6 @@ class _PropertiesPageState extends State<PropertiesPage> {
   }
 
   Future<void> _loadProperties() async {
-    // Diasumsikan ID PTW adalah 1
     final data = await _apiService.getProperties(widget.ptwId); 
     if (mounted) {
       setState(() {
@@ -84,9 +83,6 @@ class _PropertiesPageState extends State<PropertiesPage> {
     );
   }
 
-  // ... (Widget helper _buildHeader, _buildActionBar, _buildPropertyCard tetap sama)
-  // Pastikan _buildPropertyCard menggunakan field dari model PropertyPTW yang baru
-  
   Widget _buildHeader() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

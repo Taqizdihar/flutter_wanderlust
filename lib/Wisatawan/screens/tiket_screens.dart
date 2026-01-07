@@ -210,7 +210,6 @@ class _TiketScreenState extends State<TiketScreen> {
                     ),
                     ElevatedButton.icon(
                       onPressed: () {
-                        // Fitur QR Code bisa ditambahkan di sini nantinya
                       },
                       icon: const Icon(Icons.qr_code, size: 18),
                       label: const Text(

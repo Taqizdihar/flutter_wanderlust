@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../widget/kartu_destinasi.dart'; //
-import '../services/api_service.dart'; //
-import '../models/destinasi_model.dart'; //
+import '../widget/kartu_destinasi.dart';
+import '../services/api_service.dart';
+import '../models/destinasi_model.dart';
 
 class PencarianScreen extends StatefulWidget {
   final int userId;
@@ -24,7 +24,6 @@ class _PencarianScreenState extends State<PencarianScreen> {
   bool _isSearching = false;
   final ApiService _apiService = ApiService();
 
-  // Fungsi untuk memicu pencarian ke server Laravel
   void _performSearch(String query) async {
     if (query.isEmpty && _kategoriAktif == 'Semua') {
       setState(() => _hasilPencarian = []);
@@ -32,8 +31,7 @@ class _PencarianScreenState extends State<PencarianScreen> {
     }
 
     setState(() => _isSearching = true);
-    
-    // Memanggil API search yang sudah kita buat di ApiService
+
     final hasil = await _apiService.searchDestinasi(query, _kategoriAktif);
     
     setState(() {
@@ -80,16 +78,16 @@ class _PencarianScreenState extends State<PencarianScreen> {
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 12.0),
                             child: KartuDestinasi(
-                              id: dest.id.toString(), //
+                              id: dest.id.toString(),
                               nama: dest.nama,
                               lokasi: dest.lokasi,
                               rating: dest.rating,
                               ulasan: dest.ulasan,
                               harga: dest.harga,
-                              asetGambar: dest.gambar, // URL dari Laravel
+                              asetGambar: dest.gambar,
                               deskripsi: dest.deskripsi,
                               apakahListTile: true,
-                              idWisatawan: widget.idWisatawan, // Penting agar bisa simpan favorit
+                              idWisatawan: widget.idWisatawan,
                             ),
                           );
                         },

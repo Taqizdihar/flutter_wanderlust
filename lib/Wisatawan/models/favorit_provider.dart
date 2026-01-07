@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'destinasi_model.dart';
-import '../services/api_service.dart'; //
+import '../services/api_service.dart';
 
 class FavoritProvider extends ChangeNotifier {
   final List<Destinasi> _daftarFavorit = [];
