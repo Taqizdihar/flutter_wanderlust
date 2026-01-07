@@ -6,10 +6,8 @@ import '../models/owner_model.dart';
 import '../models/property_admin_model.dart';
 
 class AdminApiService {
-  // Gunakan IP Laptop Anda agar bisa diakses dari emulator/Chrome
   static const String baseUrl = 'http://127.0.0.1:8000/api/flutter';
 
-  // --- 1. Mengambil Statistik Global Dashboard ---
   Future<AdminStats?> getGlobalStats() async {
     try {
       final response = await http.get(Uri.parse('$baseUrl/admin/stats'))
@@ -25,7 +23,6 @@ class AdminApiService {
     return null;
   }
 
-  // --- 2. Mengambil Daftar Member (Wisatawan) ---
   Future<List<MemberModel>> getMembers() async {
     try {
       final response = await http.get(Uri.parse('$baseUrl/admin/members'));
@@ -39,7 +36,6 @@ class AdminApiService {
     return [];
   }
 
-  // --- 3. Mengambil Daftar Pemilik (PTW) ---
   Future<List<OwnerModel>> getOwners() async {
     try {
       final response = await http.get(Uri.parse('$baseUrl/admin/owners'));
@@ -53,7 +49,6 @@ class AdminApiService {
     return [];
   }
 
-  // --- 4. Mengambil Daftar Properti (Tempat Wisata) ---
   Future<List<PropertyAdminModel>> getProperties() async {
     try {
       final response = await http.get(Uri.parse('$baseUrl/admin/properties'));
@@ -67,7 +62,6 @@ class AdminApiService {
     return [];
   }
 
-  // --- 5. Aksi Verifikasi: Update Status User (Member/Owner) ---
   Future<bool> updateUserStatus(int idUser, String status) async {
     try {
       final response = await http.post(
@@ -81,7 +75,6 @@ class AdminApiService {
     }
   }
 
-  // --- 6. Aksi Verifikasi: Update Status Properti ---
   Future<bool> updatePropertyStatus(int idWisata, String status) async {
     try {
       final response = await http.post(

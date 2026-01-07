@@ -17,7 +17,6 @@ class AdminProfilePage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.edit),
             onPressed: () {
-              // --- PINDAH KE HALAMAN EDIT (Gacor Beb!) ---
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -31,7 +30,6 @@ class AdminProfilePage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Bagian Header Profile
             Container(
               height: 150,
               decoration: BoxDecoration(
@@ -53,8 +51,6 @@ class AdminProfilePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-
-            // Detail Informasi (Tampilan tetap cantik seperti permintaanmu)
             _profileItem(Icons.person, "Nama Lengkap", "Riska Dea Bakri"),
             _profileItem(Icons.email, "Email", "riska.dea@admin.com"),
             _profileItem(

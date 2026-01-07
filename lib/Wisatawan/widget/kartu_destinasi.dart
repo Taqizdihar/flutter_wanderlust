@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../services/api_service.dart';
-import '../models/favorit_provider.dart';
-import '../models/destinasi_model.dart'; // Menggunakan model Destinasi baru
+import '../services/api_service.dart'; //
+import '../models/favorit_provider.dart'; //
+import '../models/destinasi_model.dart'; //
 
 class KartuDestinasi extends StatelessWidget {
-  final String id; // ID Wisata dari Laravel
+  final String id; 
   final String nama;
   final String lokasi;
   final double rating;
   final int ulasan;
   final int harga;
-  final String asetGambar; // Sekarang berisi URL Network
+  final String asetGambar; 
   final String deskripsi;
   final bool apakahListTile;
-  final int? idWisatawan; // Tambahkan ini untuk keperluan API
+  final int? idWisatawan; 
 
   const KartuDestinasi({
     super.key,
@@ -55,12 +55,18 @@ class KartuDestinasi extends StatelessWidget {
                   Text(formatCurrency.format(harga), style: const TextStyle(fontSize: 18, color: Colors.teal, fontWeight: FontWeight.bold)),
                   ElevatedButton(
                     onPressed: () async {
+                      if (idWisatawan == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Silakan login terlebih dahulu')),
+                        );
+                        return;
+                      }
+
                       final messenger = ScaffoldMessenger.of(context);
                       
-                      // Menyiapkan data untuk dikirim ke API Laravel
-                      // Catatan: id tiket di sini diasumsikan sama dengan id wisata untuk simulasi awal
+                      // Memanggil API simpan pesanan tiket
                       bool sukses = await ApiService().simpanPesanan(
-                        idWisatawan ?? 0, 
+                        idWisatawan!, 
                         int.parse(id), 
                         1
                       );
@@ -69,7 +75,11 @@ class KartuDestinasi extends StatelessWidget {
 
                       if (sukses) {
                         messenger.showSnackBar(
-                          SnackBar(content: Text('Berhasil memesan tiket ke $nama!'), backgroundColor: Colors.teal, behavior: SnackBarBehavior.floating),
+                          SnackBar(
+                            content: Text('Tiket $nama berhasil dipesan! Cek di menu Tiket.'), 
+                            backgroundColor: Colors.teal, 
+                            behavior: SnackBarBehavior.floating
+                          ),
                         );
                       }
                     },
@@ -88,7 +98,6 @@ class KartuDestinasi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final favoritProvider = Provider.of<FavoritProvider>(context);
-    // Cek favorit berdasarkan ID (int) agar lebih akurat
     bool isSaved = favoritProvider.apakahTersimpan(int.parse(id));
 
     return InkWell(
@@ -108,7 +117,6 @@ class KartuDestinasi extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
-                  // MENGGUNAKAN Image.network untuk data dari Laravel
                   child: Image.network(
                     asetGambar, 
                     height: 140, 
@@ -133,26 +141,69 @@ class KartuDestinasi extends StatelessWidget {
                         color: Colors.teal,
                         size: 20,
                       ),
-                      onPressed: () {
-                        favoritProvider.tambahkanHapusFavorit(Destinasi(
-                          id: int.parse(id), 
-                          nama: nama, 
-                          lokasi: lokasi, 
-                          rating: rating,
-                          ulasan: ulasan, 
-                          harga: harga, 
-                          gambar: asetGambar, 
-                          deskripsi: deskripsi
-                        ));
+                      onPressed: () async {
+                        if (idWisatawan == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Silakan login untuk menyimpan favorit')),
+                          );
+                          return;
+                        }
+
+                        // 1. Panggil API Toggle Bookmark terlebih dahulu
+                        bool sukses = await ApiService().toggleBookmark(idWisatawan!, int.parse(id));
+
+                        if (sukses) {
+                          // 2. Jika sukses di database, baru perbarui Provider lokal
+                          favoritProvider.tambahkanHapusFavorit(Destinasi(
+                            id: int.parse(id), 
+                            nama: nama, 
+                            lokasi: lokasi, 
+                            rating: rating,
+                            ulasan: ulasan, 
+                            harga: harga, 
+                            gambar: asetGambar, 
+                            deskripsi: deskripsi
+                          ));
+                        }
                       },
                     ),
                   ),
                 ),
               ],
             ),
-            // ... (Bagian teks tetap sama)
+            _buildTextInfo(),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildTextInfo() {
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(nama, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16), maxLines: 1, overflow: TextOverflow.ellipsis),
+          const SizedBox(height: 4),
+          Row(
+            children: [
+              const Icon(Icons.location_on, size: 14, color: Colors.teal),
+              const SizedBox(width: 4),
+              Expanded(child: Text(lokasi, style: const TextStyle(color: Colors.grey, fontSize: 12), maxLines: 1, overflow: TextOverflow.ellipsis)),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              const Icon(Icons.star, size: 14, color: Colors.amber),
+              const SizedBox(width: 4),
+              Text(rating.toString(), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+              const SizedBox(width: 4),
+              Text('($ulasan ulasan)', style: const TextStyle(color: Colors.grey, fontSize: 12)),
+            ],
+          ),
+        ],
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../models/destinasi_model.dart'; // Menggunakan model tunggal Destinasi
+import '../models/destinasi_model.dart'; //
 import '../services/api_service.dart'; //
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart'; //
 
 class TiketScreen extends StatefulWidget {
   final int userId;
@@ -24,8 +24,15 @@ class _TiketScreenState extends State<TiketScreen> {
   @override
   void initState() {
     super.initState();
-    // Memanggil API riwayat tiket berdasarkan ID Wisatawan
+    // Memanggil API riwayat tiket berdasarkan ID Wisatawan dari database Laravel
     _futureTiket = _apiService.fetchUserTickets(widget.idWisatawan);
+  }
+
+  // Fungsi untuk menyegarkan data secara manual
+  Future<void> _refreshTiket() async {
+    setState(() {
+      _futureTiket = _apiService.fetchUserTickets(widget.idWisatawan);
+    });
   }
 
   @override
@@ -47,36 +54,34 @@ class _TiketScreenState extends State<TiketScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: FutureBuilder<List<Destinasi>>(
-        future: _futureTiket,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Terjadi kesalahan: ${snapshot.error}'));
-          }
-          
-          final daftarTiket = snapshot.data ?? [];
+      body: RefreshIndicator(
+        onRefresh: _refreshTiket, // Menambahkan kemampuan pull-to-refresh
+        child: FutureBuilder<List<Destinasi>>(
+          future: _futureTiket,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Terjadi kesalahan: ${snapshot.error}'));
+            }
+            
+            final daftarTiket = snapshot.data ?? [];
 
-          return daftarTiket.isEmpty
-              ? _bangunTampilanKosong()
-              : RefreshIndicator(
-                  onRefresh: () async {
-                    setState(() {
-                      _futureTiket = _apiService.fetchUserTickets(widget.idWisatawan);
-                    });
-                  },
-                  child: ListView.builder(
-                    padding: const EdgeInsets.all(20),
-                    itemCount: daftarTiket.length,
-                    itemBuilder: (context, index) {
-                      final tiket = daftarTiket[index];
-                      // Membangun kartu tiket dengan data dari database
-                      return _bangunKartuTiketAesthetic(context, tiket, formatCurrency);
-                    },
-                  ),
-                );
-        },
+            if (daftarTiket.isEmpty) {
+              return _bangunTampilanKosong();
+            }
+
+            return ListView.builder(
+              padding: const EdgeInsets.all(20),
+              physics: const AlwaysScrollableScrollPhysics(), // Agar RefreshIndicator selalu bisa ditarik
+              itemCount: daftarTiket.length,
+              itemBuilder: (context, index) {
+                final tiket = daftarTiket[index];
+                return _bangunKartuTiketAesthetic(context, tiket, formatCurrency);
+              },
+            );
+          },
+        ),
       ),
     );
   }
@@ -101,7 +106,7 @@ class _TiketScreenState extends State<TiketScreen> {
             children: [
               ClipRRect(
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-                // MENGGUNAKAN Image.network untuk gambar dari server
+                // Menampilkan gambar asli dari server Laravel
                 child: Image.network(
                   tiket.gambar,
                   height: 150,
@@ -124,7 +129,7 @@ class _TiketScreenState extends State<TiketScreen> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: const Text(
-                    'Confirmed',
+                    'Confirmed', // Status tiket dari database
                     style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -137,43 +142,29 @@ class _TiketScreenState extends State<TiketScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  tiket.nama,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            tiket.nama,
-                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            children: [
-                              const Icon(Icons.location_on, size: 14, color: Colors.teal),
-                              const SizedBox(width: 4),
-                              Text(tiket.lokasi, style: const TextStyle(color: Colors.grey, fontSize: 12)),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                    const Icon(Icons.location_on, size: 14, color: Colors.teal),
+                    const SizedBox(width: 4),
+                    Text(tiket.lokasi, style: const TextStyle(color: Colors.grey, fontSize: 12)),
                   ],
                 ),
-                
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 15),
                   child: Divider(height: 1, thickness: 1, color: Color(0xFFEEEEEE)),
                 ),
-                
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('HARGA TIKET', style: TextStyle(color: Colors.grey, fontSize: 10, letterSpacing: 1.2)),
+                        const Text('TOTAL PEMBAYARAN', style: TextStyle(color: Colors.grey, fontSize: 10, letterSpacing: 1.2)),
                         const SizedBox(height: 4),
                         Text(
                           formatCurrency.format(tiket.harga),
@@ -181,18 +172,17 @@ class _TiketScreenState extends State<TiketScreen> {
                         ),
                       ],
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.teal),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Row(
-                        children: [
-                          Icon(Icons.qr_code, size: 18, color: Colors.teal),
-                          SizedBox(width: 8),
-                          Text('LIHAT TICKET', style: TextStyle(color: Colors.teal, fontSize: 11, fontWeight: FontWeight.bold)),
-                        ],
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        // Fitur QR Code bisa ditambahkan di sini nantinya
+                      },
+                      icon: const Icon(Icons.qr_code, size: 18),
+                      label: const Text('LIHAT TIKET', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.teal,
+                        side: const BorderSide(color: Colors.teal),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       ),
                     ),
                   ],
@@ -216,9 +206,9 @@ class _TiketScreenState extends State<TiketScreen> {
             child: Icon(Icons.confirmation_num_outlined, size: 80, color: Colors.teal.withOpacity(0.2)),
           ),
           const SizedBox(height: 20),
-          const Text('Oops! Belum Ada Tiket', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
+          const Text('Belum Ada Tiket Dipesan', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
-          const Text('Silakan cari destinasi favoritmu\ndan pesan tiket sekarang.', textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
+          const Text('Tiket yang Anda pesan di halaman Beranda\nakan muncul secara otomatis di sini.', textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
         ],
       ),
     );

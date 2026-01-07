@@ -1,9 +1,9 @@
 // ignore_for_file: unnecessary_null_comparison
 
 import 'package:flutter/material.dart';
-import '../models/user_model.dart'; //
-import '../services/api_service.dart'; //
-import '../../login.dart'; // Import halaman login untuk fungsi Logout
+import '../models/user_model.dart'; 
+import '../services/api_service.dart'; 
+import '../../login.dart'; 
 
 class ProfilScreen extends StatefulWidget {
   final int userId;
@@ -20,14 +20,13 @@ class _ProfilScreenState extends State<ProfilScreen> {
   @override
   void initState() {
     super.initState();
-    // Meminta ApiService mengambil data profil dari Laravel
+    // PERBAIKAN: Menambahkan operator '!' untuk memastikan data tidak null setelah dicek
     _futureUser = _apiService.getUserProfile(widget.userId).then((data) {
       return data != null ? UserModel.fromJson(data) : null;
     });
   }
 
   void _handleLogout() {
-    // Navigasi kembali ke halaman Login dan hapus semua history navigasi
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -59,6 +58,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
+          // Menampilkan pesan error jika data null atau gagal dimuat
           if (snapshot.hasError || !snapshot.hasData || snapshot.data == null) {
             return const Center(child: Text("Gagal memuat profil. Pastikan server menyala."));
           }
@@ -98,6 +98,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
         CircleAvatar(
           radius: 60,
           backgroundColor: Colors.teal.shade100,
+          // PERBAIKAN: Menggunakan null-check '?' agar tidak error saat fotoProfil null
           backgroundImage: (user.fotoProfil != null && user.fotoProfil.isNotEmpty) 
               ? NetworkImage(user.fotoProfil) 
               : null,
@@ -157,7 +158,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
     return ListTile(
       leading: Icon(ikon, color: Colors.teal),
       title: Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-      subtitle: Text(isi.isNotEmpty ? isi : '-', style: const TextStyle(fontSize: 16, color: Colors.black87)),
+      subtitle: Text(isi != null && isi.isNotEmpty ? isi : '-', style: const TextStyle(fontSize: 16, color: Colors.black87)),
       contentPadding: EdgeInsets.zero,
     );
   }
@@ -168,7 +169,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: () {}, // Tambahkan navigasi Edit Profil jika diperlukan
+            onPressed: () {}, 
             style: ElevatedButton.styleFrom(backgroundColor: Colors.teal, padding: const EdgeInsets.symmetric(vertical: 15), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
             child: const Text('Edit Profil', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
           ),

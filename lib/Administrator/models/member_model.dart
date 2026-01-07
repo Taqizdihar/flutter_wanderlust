@@ -17,7 +17,6 @@ class MemberModel {
     return MemberModel(
       idUser: json['id_user'] ?? 0,
       name: json['nama'] ?? "No Name",
-      // Status akun 'aktif' di DB dipetakan ke boolean isActive
       isActive: json['status_akun'] == 'aktif',
       registrationDate: json['created_at'] ?? "-",
       email: json['email'] ?? "",
