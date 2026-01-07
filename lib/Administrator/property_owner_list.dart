@@ -1,61 +1,37 @@
 import 'package:flutter/material.dart';
 import 'owner_verification_page.dart';
+// Pastikan path import benar sesuai struktur folder Anda
+import 'models/owner_model.dart';
+import 'services/admin_api_service.dart';
 
 class PropertyOwnerListPage extends StatefulWidget {
+  const PropertyOwnerListPage({super.key}); // Tambahkan const untuk performa
+
   @override
   State<PropertyOwnerListPage> createState() => _PropertyOwnerListPageState();
 }
 
 class _PropertyOwnerListPageState extends State<PropertyOwnerListPage> {
   final Color mainColor = const Color(0xFF0A6A84);
+  
+  final AdminApiService _adminApiService = AdminApiService();
+  late Future<List<OwnerModel>> _futureOwners;
 
-  List<Map<String, dynamic>> owners = [
-    {
-      "name": "Aisyah Noviani",
-      "status": "Pending",
-      "date": "28/4/2025",
-      "image":
-          "assets/images/Aisyah noviani.jpeg", // Sesuai nama file di folder beb
-      "email": "aisyah.n@gmail.com",
-      "phone": "0812-3456-7891",
-      "address": "Bandung, Jawa Barat",
-    },
-    {
-      "name": "Faiz Syafiq Nabily",
-      "status": "Active",
-      "date": "12/3/2025",
-      "image": "assets/images/Faiz syafiq.jpeg",
-      "email": "faiz.s@gmail.com",
-      "phone": "0812-3456-7892",
-      "address": "Jakarta Selatan",
-    },
-    {
-      "name": "Muh.Taqi",
-      "status": "Active",
-      "date": "1/12/2024",
-      "image": "assets/images/Muh.taqi.jpeg",
-      "email": "muh.taqi@gmail.com",
-      "phone": "0812-3456-7893",
-      "address": "Surabaya, Jawa Timur",
-    },
-    {
-      "name": "Siti Amany",
-      "status": "Revision",
-      "date": "18/11/2024",
-      "image": "assets/images/Siti amany.jpeg",
-      "email": "siti.amany@gmail.com",
-      "phone": "0812-3456-7894",
-      "address": "Yogyakarta",
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _futureOwners = _adminApiService.getOwners();
+  }
 
   Color getStatusColor(String status) {
-    switch (status) {
-      case "Pending":
+    switch (status.toLowerCase()) {
+      case "pending":
         return Colors.orange;
-      case "Active":
+      case "aktif":
+      case "active":
         return Colors.green;
-      case "Revision":
+      case "revisi":
+      case "revision":
         return Colors.red;
       default:
         return Colors.grey;
@@ -71,11 +47,7 @@ class _PropertyOwnerListPageState extends State<PropertyOwnerListPage> {
         elevation: 0,
         title: Text(
           "Property Owner List",
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: mainColor,
-          ),
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: mainColor),
         ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: mainColor),
@@ -83,92 +55,109 @@ class _PropertyOwnerListPageState extends State<PropertyOwnerListPage> {
         ),
       ),
 
-      body: ListView.builder(
-        padding: EdgeInsets.all(16),
-        itemCount: owners.length,
-        itemBuilder: (context, index) {
-          var item = owners[index];
-
-          return Container(
-            margin: EdgeInsets.only(bottom: 16),
-            decoration: BoxDecoration(
-              color: mainColor,
-              borderRadius: BorderRadius.circular(16),
-            ),
-
-            child: ListTile(
-              contentPadding: EdgeInsets.all(18),
-
-              leading: CircleAvatar(
-                radius: 28,
-                backgroundColor:
-                    Colors.white, // Tambah background biar rapi kalau loading
-                backgroundImage: AssetImage(
-                  item["image"],
-                ), // <-- GANTI JADI AssetImage
-              ),
-
-              title: Text(
-                item["name"],
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 6),
-
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: getStatusColor(item["status"]),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      item["status"],
-                      style: TextStyle(color: Colors.white, fontSize: 12),
-                    ),
-                  ),
-
-                  SizedBox(height: 4),
-
-                  Text(
-                    "registered ${item["date"]}",
-                    style: const TextStyle(color: Colors.white70, fontSize: 12),
-                  ),
-                ],
-              ),
-
-              // ===== BUTTON ACTIONS =====
-              trailing: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: mainColor,
-                ),
-                onPressed: () async {
-                  final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          OwnerVerificationPage(ownerData: item),
-                    ),
-                  );
-
-                  if (result != null) {
-                    setState(() {
-                      owners[index]["status"] = result;
-                    });
-                  }
-                },
-                child: Text("Actions"),
-              ),
-            ),
-          );
+      body: RefreshIndicator(
+        onRefresh: () async {
+          setState(() {
+            _futureOwners = _adminApiService.getOwners();
+          });
         },
+        child: FutureBuilder<List<OwnerModel>>(
+          future: _futureOwners,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text('Tidak ada pemilik yang terdaftar'));
+            }
+
+            final owners = snapshot.data!;
+
+            return ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: owners.length,
+              itemBuilder: (context, index) {
+                final item = owners[index];
+
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: mainColor,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.all(18),
+                    leading: CircleAvatar(
+                      radius: 28,
+                      backgroundColor: Colors.white,
+                      backgroundImage: NetworkImage(item.image), // Menggunakan data dinamis
+                      onBackgroundImageError: (_, __) => const Icon(Icons.person, color: Colors.grey),
+                    ),
+                    title: Text(
+                      item.name,
+                      style: const TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 6),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: getStatusColor(item.status),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            item.status,
+                            style: const TextStyle(color: Colors.white, fontSize: 12),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        // PERBAIKAN BARIS 128: Sekarang registrationDate sudah dikenali
+                        Text(
+                          "registered ${item.registrationDate}",
+                          style: const TextStyle(color: Colors.white70, fontSize: 12),
+                        ),
+                      ],
+                    ),
+                    trailing: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: mainColor,
+                      ),
+                      onPressed: () async {
+                        final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => OwnerVerificationPage(
+                              ownerData: {
+                                "id_user": item.idUser,
+                                "name": item.name,
+                                "status": item.status,
+                                "image": item.image,
+                                "email": item.email,
+                                "phone": item.phone,
+                                "organization": item.organization,
+                              },
+                            ),
+                          ),
+                        );
+
+                        if (result != null) {
+                          setState(() {
+                            _futureOwners = _adminApiService.getOwners();
+                          });
+                        }
+                      },
+                      child: const Text("Actions"),
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
