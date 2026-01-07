@@ -21,7 +21,10 @@ class _LoginScreenState extends State<LoginScreen> {
     String pass = _passController.text;
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Authenticating..."), duration: Duration(seconds: 1)),
+      const SnackBar(
+        content: Text("Authenticating..."),
+        duration: Duration(seconds: 1),
+      ),
     );
 
     final response = await _apiService.login(email, pass);
@@ -31,7 +34,10 @@ class _LoginScreenState extends State<LoginScreen> {
       final String peran = userData['peran'];
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Login Successful"), backgroundColor: Colors.teal),
+        const SnackBar(
+          content: Text("Login Successful"),
+          backgroundColor: Colors.teal,
+        ),
       );
 
       // Navigasi berdasarkan peran
@@ -41,33 +47,37 @@ class _LoginScreenState extends State<LoginScreen> {
           MaterialPageRoute(
             // Memanggil DashboardPage milik Pemilik menggunakan alias 'ptw'
             builder: (context) => ptw.DashboardPage(
-              userId: userData['id_user'], 
-              ptwId: userData['id_ptw']
-            )
+              userId: userData['id_user'],
+              ptwId: userData['id_ptw'],
+            ),
           ),
         );
       } else if (peran == 'administrator') {
-          Navigator.pushReplacement(
-            context, 
-            MaterialPageRoute(
-              // Memanggil DashboardPage milik Ika menggunakan alias 'admin'
-              builder: (context) => const admin.DashboardPage()
-            )
-          );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            // Memanggil DashboardPage milik Ika menggunakan alias 'admin'
+            builder: (context) => const admin.DashboardPage(),
+          ),
+        );
       } else if (peran == 'wisatawan') {
-          Navigator.pushReplacement(
-            context, 
-            MaterialPageRoute(
-              builder: (context) => RootScreen(
-                userId: userData['id_user'], 
-                idWisatawan: userData['id_wisatawan'], // Diambil dari respon Laravel
-              )
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => RootScreen(
+              userId: userData['id_user'],
+              idWisatawan:
+                  userData['id_wisatawan'], // Diambil dari respon Laravel
             ),
-          );
+          ),
+        );
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Email atau Password salah!"), backgroundColor: Colors.red),
+        const SnackBar(
+          content: Text("Email atau Password salah!"),
+          backgroundColor: Colors.red,
+        ),
       );
     }
   }
@@ -86,7 +96,11 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 24),
               const Text(
                 "Welcome back",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF00838F)),
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF00838F),
+                ),
               ),
               const SizedBox(height: 40),
               _buildTextField("Username / Email", _userController, false),
@@ -100,11 +114,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF00838F),
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   child: const Text(
                     "Log In",
-                    style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
@@ -118,25 +138,54 @@ class _LoginScreenState extends State<LoginScreen> {
   // --- Widget Helper buildLogo & buildTextField tetap sama ---
   Widget _buildLogo() {
     return Container(
-      width: 120, height: 120, padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: const Color(0xFF00838F), width: 4)),
-      child: Image.asset('assets/images/Wanderlust Logo Circle.png', fit: BoxFit.contain,
-        errorBuilder: (c, e, s) => const Icon(Icons.travel_explore, size: 40, color: Color(0xFF00838F))),
+      width: 120,
+      height: 120,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: const Color(0xFF00838F), width: 4),
+      ),
+      child: Image.asset(
+        'assets/images/Wanderlust Logo Circle.png',
+        fit: BoxFit.contain,
+        errorBuilder: (c, e, s) => const Icon(
+          Icons.travel_explore,
+          size: 40,
+          color: Color(0xFF00838F),
+        ),
+      ),
     );
   }
 
-  Widget _buildTextField(String label, TextEditingController controller, bool isPass) {
+  Widget _buildTextField(
+    String label,
+    TextEditingController controller,
+    bool isPass,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF00838F), fontSize: 16)),
+        Text(
+          label,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF00838F),
+            fontSize: 16,
+          ),
+        ),
         const SizedBox(height: 8),
         TextField(
           controller: controller,
           obscureText: isPass,
           decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFF00838F))),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 14,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xFF00838F)),
+            ),
           ),
         ),
       ],

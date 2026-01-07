@@ -5,7 +5,6 @@ import 'property_list.dart';
 import 'member_list.dart';
 import 'property_owner_list.dart';
 import 'admin_profile.dart';
-// IMPORT SERVICE DAN MODEL BARU
 import 'services/admin_api_service.dart';
 import 'models/admin_stats_model.dart';
 import '../login.dart';
@@ -21,18 +20,15 @@ class _DashboardPageState extends State<DashboardPage> {
   final Color primaryColor = const Color(0xFF0A6A84);
   final Color accentColor = const Color(0xFF1493B1);
 
-  // INISIALISASI SERVICE
   final AdminApiService _adminApiService = AdminApiService();
   late Future<AdminStats?> _statsFuture;
 
   @override
   void initState() {
     super.initState();
-    // Memanggil data statistik global dari Laravel saat halaman dimuat
     _statsFuture = _adminApiService.getGlobalStats();
   }
 
-  // --- REVENUE DETAILS & LOGOUT DIALOG TETAP SAMA ---
   void _showRevenueDetails(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -73,32 +69,31 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void _showLogoutDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: const Text("Logout"),
-      content: const Text("Are you sure you want to exit?"),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context), 
-          child: const Text("Cancel")
-        ),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-          onPressed: () {
-            // PERBAIKAN: Navigasi reset ke LoginScreen
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => const LoginScreen()),
-              (route) => false,
-            );
-          },
-          child: const Text("Logout", style: TextStyle(color: Colors.white)),
-        ),
-      ],
-    ),
-  );
-}
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Logout"),
+        content: const Text("Are you sure you want to exit?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancel"),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+                (route) => false,
+              );
+            },
+            child: const Text("Logout", style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,13 +120,10 @@ class _DashboardPageState extends State<DashboardPage> {
                       const SizedBox(height: 20),
                       _buildUserInfo(context),
                       const SizedBox(height: 30),
-
-                      // FUTUREBUILDER UNTUK MENGISI DATA STATISTIK SECARA DINAMIS
                       FutureBuilder<AdminStats?>(
                         future: _statsFuture,
                         builder: (context, snapshot) {
                           final stats = snapshot.data;
-
                           return GridView.count(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
@@ -185,16 +177,14 @@ class _DashboardPageState extends State<DashboardPage> {
                               _buildStatCard(
                                 icon: Icons.account_balance_wallet_rounded,
                                 title: "Total Top Up",
-                                value: "32", // Data statis sementara
+                                value: "32",
                                 onTap: () {},
                               ),
                             ],
                           );
                         },
                       ),
-
                       const SizedBox(height: 25),
-                      // MENGGUNAKAN DATA REVENUE DARI LARAVEL
                       FutureBuilder<AdminStats?>(
                         future: _statsFuture,
                         builder: (context, snapshot) {
@@ -227,7 +217,6 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  // --- HELPER WIDGET UNTUK KARTU STATISTIK (Disederhanakan agar UI tetap sama) ---
   Widget _buildStatCard({
     required IconData icon,
     required String title,
@@ -321,7 +310,7 @@ class _DashboardPageState extends State<DashboardPage> {
       type: BottomNavigationBarType.fixed,
       selectedItemColor: primaryColor,
       unselectedItemColor: Colors.grey,
-      currentIndex: 0, // Dashboard aktif
+      currentIndex: 0,
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: 'Home'),
         BottomNavigationBarItem(

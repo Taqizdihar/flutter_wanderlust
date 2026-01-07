@@ -1,32 +1,31 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../models/destinasi_model.dart'; //
+import '../models/destinasi_model.dart';
 
 class ApiService {
-  // Samakan dengan alamat IP laptop Anda
   static const String _baseUrl = 'http://127.0.0.1:8000/api/flutter';
 
-  // --- 1. Ambil Daftar Destinasi Wisata dari Laravel ---
   Future<Map<String, dynamic>?> getUserProfile(int userId) async {
-      try {
-        final response = await http.get(
-          Uri.parse('$_baseUrl/profile/$userId'),
-          headers: {'Accept': 'application/json'},
-        ).timeout(const Duration(seconds: 5));
+    try {
+      final response = await http
+          .get(
+            Uri.parse('$_baseUrl/profile/$userId'),
+            headers: {'Accept': 'application/json'},
+          )
+          .timeout(const Duration(seconds: 5));
 
-        if (response.statusCode == 200) {
-          final decoded = jsonDecode(response.body);
-          // Mengambil data dari key 'data' sesuai respon Laravel
-          if (decoded is Map && decoded.containsKey('data')) {
-            return Map<String, dynamic>.from(decoded['data']);
-          }
-          return Map<String, dynamic>.from(decoded);
+      if (response.statusCode == 200) {
+        final decoded = jsonDecode(response.body);
+        if (decoded is Map && decoded.containsKey('data')) {
+          return Map<String, dynamic>.from(decoded['data']);
         }
-      } catch (e) {
-        print("Profile Error: $e");
+        return Map<String, dynamic>.from(decoded);
       }
-      return null;
+    } catch (e) {
+      print("Profile Error: $e");
     }
+    return null;
+  }
 
   Future<List<Destinasi>> fetchDestinasi() async {
     try {
@@ -45,17 +44,18 @@ class ApiService {
     return [];
   }
 
-  // --- 2. Simpan atau Hapus Bookmark (Favorit) ke Laravel ---
   Future<bool> toggleBookmark(int idWisatawan, int idWisata) async {
     try {
-      final response = await http.post(
-        Uri.parse('$_baseUrl/wisatawan/bookmarks/toggle'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'id_wisatawan': idWisatawan,
-          'id_wisata': idWisata,
-        }),
-      ).timeout(const Duration(seconds: 5));
+      final response = await http
+          .post(
+            Uri.parse('$_baseUrl/wisatawan/bookmarks/toggle'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({
+              'id_wisatawan': idWisatawan,
+              'id_wisata': idWisata,
+            }),
+          )
+          .timeout(const Duration(seconds: 5));
 
       return response.statusCode == 200 || response.statusCode == 201;
     } catch (e) {
@@ -64,18 +64,19 @@ class ApiService {
     }
   }
 
-  // --- 3. Simpan Pesanan Tiket (Ke Database Laravel) ---
   Future<bool> simpanPesanan(int idWisatawan, int idWisata, int jumlah) async {
     try {
-      final response = await http.post(
-        Uri.parse('$_baseUrl/wisatawan/pesan-tiket'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'id_wisatawan': idWisatawan,
-          'id_wisata': idWisata, // Menggunakan id_wisata sebagai referensi tiket
-          'jumlah_tiket': jumlah,
-        }),
-      ).timeout(const Duration(seconds: 5));
+      final response = await http
+          .post(
+            Uri.parse('$_baseUrl/wisatawan/pesan-tiket'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({
+              'id_wisatawan': idWisatawan,
+              'id_wisata': idWisata,
+              'jumlah_tiket': jumlah,
+            }),
+          )
+          .timeout(const Duration(seconds: 5));
 
       return response.statusCode == 201 || response.statusCode == 200;
     } catch (e) {
@@ -84,12 +85,15 @@ class ApiService {
     }
   }
 
-  // --- 4. Cari Destinasi (Live Search) ---
   Future<List<Destinasi>> searchDestinasi(String query, String kategori) async {
     try {
-      final response = await http.get(
-        Uri.parse('$_baseUrl/wisatawan/search?query=$query&category=$kategori'),
-      ).timeout(const Duration(seconds: 5));
+      final response = await http
+          .get(
+            Uri.parse(
+              '$_baseUrl/wisatawan/search?query=$query&category=$kategori',
+            ),
+          )
+          .timeout(const Duration(seconds: 5));
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body)['data'];
@@ -101,12 +105,11 @@ class ApiService {
     return [];
   }
 
-  // --- 5. Ambil Daftar Bookmark (Tersimpan) ---
   Future<List<Destinasi>> fetchBookmarks(int idWisatawan) async {
     try {
-      final response = await http.get(
-        Uri.parse('$_baseUrl/wisatawan/bookmarks/$idWisatawan'),
-      ).timeout(const Duration(seconds: 5));
+      final response = await http
+          .get(Uri.parse('$_baseUrl/wisatawan/bookmarks/$idWisatawan'))
+          .timeout(const Duration(seconds: 5));
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body)['data'];
@@ -118,12 +121,11 @@ class ApiService {
     return [];
   }
 
-  // --- 6. Ambil Riwayat Tiket ---
   Future<List<Destinasi>> fetchUserTickets(int idWisatawan) async {
     try {
-      final response = await http.get(
-        Uri.parse('$_baseUrl/wisatawan/tickets/$idWisatawan'),
-      ).timeout(const Duration(seconds: 5));
+      final response = await http
+          .get(Uri.parse('$_baseUrl/wisatawan/tickets/$idWisatawan'))
+          .timeout(const Duration(seconds: 5));
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body)['data'];

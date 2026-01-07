@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'services/admin_api_service.dart'; //
+import 'services/admin_api_service.dart';
 
 class OwnerVerificationPage extends StatefulWidget {
   final Map<String, dynamic> ownerData;
@@ -28,8 +28,8 @@ class _OwnerVerificationPageState extends State<OwnerVerificationPage> {
 
     // Memperbarui status_akun di tabel users melalui API
     bool sukses = await _adminApiService.updateUserStatus(
-      widget.ownerData["id_user"], 
-      status
+      widget.ownerData["id_user"],
+      status,
     );
 
     setState(() => _isLoading = false);
@@ -37,7 +37,7 @@ class _OwnerVerificationPageState extends State<OwnerVerificationPage> {
     if (sukses) {
       if (mounted) {
         // Kembali ke list dengan status baru agar UI terupdate
-        Navigator.pop(context, status); 
+        Navigator.pop(context, status);
       }
     } else {
       if (mounted) {
@@ -63,64 +63,82 @@ class _OwnerVerificationPageState extends State<OwnerVerificationPage> {
         ),
         title: Text(
           "Owner Identity Verification",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: mainColor),
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: mainColor,
+          ),
         ),
       ),
-      body: _isLoading 
-        ? const Center(child: CircularProgressIndicator())
-        : SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                CircleAvatar(
-                  radius: 60,
-                  // Gambar diambil dari URL foto_profil di database
-                  backgroundImage: NetworkImage(data["image"]),
-                  onBackgroundImageError: (_, __) => const Icon(Icons.person, size: 60),
-                ),
-                const SizedBox(height: 14),
-                Text(
-                  data["name"],
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: mainColor),
-                ),
-                const SizedBox(height: 20),
-
-                // Data dinamis dari database Laravel
-                buildDetail("Full Name", data["name"]),
-                buildDetail("Email", data["email"]),
-                buildDetail("Phone Number", data["phone"]),
-                buildDetail("Organization", data["organization"]), // Menampilkan nama organisasi/bisnis PTW
-
-                const SizedBox(height: 20),
-                buildDocumentButton("See Tax Document"),
-                const SizedBox(height: 12),
-                buildDocumentButton("See Legal Business Document"),
-                const SizedBox(height: 30),
-
-                // TOMBOL APPROVE
-                ElevatedButton(
-                  onPressed: () => _prosesVerifikasi('aktif'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    minimumSize: const Size(double.infinity, 50)
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  CircleAvatar(
+                    radius: 60,
+                    // Gambar diambil dari URL foto_profil di database
+                    backgroundImage: NetworkImage(data["image"]),
+                    onBackgroundImageError: (_, __) =>
+                        const Icon(Icons.person, size: 60),
                   ),
-                  child: const Text("Approve", style: TextStyle(fontSize: 18, color: Colors.white)),
-                ),
-
-                const SizedBox(height: 14),
-
-                // TOMBOL REVISION
-                ElevatedButton(
-                  onPressed: () => _prosesVerifikasi('revisi'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    minimumSize: const Size(double.infinity, 50)
+                  const SizedBox(height: 14),
+                  Text(
+                    data["name"],
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: mainColor,
+                    ),
                   ),
-                  child: const Text("Revision", style: TextStyle(fontSize: 18, color: Colors.white)),
-                )
-              ],
+                  const SizedBox(height: 20),
+
+                  // Data dinamis dari database Laravel
+                  buildDetail("Full Name", data["name"]),
+                  buildDetail("Email", data["email"]),
+                  buildDetail("Phone Number", data["phone"]),
+                  buildDetail(
+                    "Organization",
+                    data["organization"],
+                  ), // Menampilkan nama organisasi/bisnis PTW
+
+                  const SizedBox(height: 20),
+                  buildDocumentButton("See Tax Document"),
+                  const SizedBox(height: 12),
+                  buildDocumentButton("See Legal Business Document"),
+                  const SizedBox(height: 30),
+
+                  // TOMBOL APPROVE
+                  ElevatedButton(
+                    onPressed: () => _prosesVerifikasi('aktif'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      minimumSize: const Size(double.infinity, 50),
+                    ),
+                    child: const Text(
+                      "Approve",
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    ),
+                  ),
+
+                  const SizedBox(height: 14),
+
+                  // TOMBOL REVISION
+                  ElevatedButton(
+                    onPressed: () => _prosesVerifikasi('revisi'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      minimumSize: const Size(double.infinity, 50),
+                    ),
+                    child: const Text(
+                      "Revision",
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
     );
   }
 
@@ -132,12 +150,22 @@ class _OwnerVerificationPageState extends State<OwnerVerificationPage> {
         children: [
           SizedBox(
             width: 120,
-            child: Text("$title:",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: mainColor)),
+            child: Text(
+              "$title:",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: mainColor,
+              ),
+            ),
           ),
           const SizedBox(width: 10),
           Expanded(
-              child: Text(value.isNotEmpty ? value : "-", style: const TextStyle(fontSize: 16, color: Colors.black87))),
+            child: Text(
+              value.isNotEmpty ? value : "-",
+              style: const TextStyle(fontSize: 16, color: Colors.black87),
+            ),
+          ),
         ],
       ),
     );
@@ -146,12 +174,15 @@ class _OwnerVerificationPageState extends State<OwnerVerificationPage> {
   Widget buildDocumentButton(String text) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-      decoration: BoxDecoration(color: mainColor, borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(
+        color: mainColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(text, style: const TextStyle(color: Colors.white, fontSize: 16)),
-          const Icon(Icons.open_in_new, color: Colors.white)
+          const Icon(Icons.open_in_new, color: Colors.white),
         ],
       ),
     );

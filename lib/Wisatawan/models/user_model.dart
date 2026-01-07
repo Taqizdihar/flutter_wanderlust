@@ -23,7 +23,7 @@ class UserModel {
     required this.fotoProfil,
   });
 
-  // Fungsi untuk memetakan JSON dari Laravel (Response gabungan User & Wisatawan)
+
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       idUser: json['id_user'] ?? 0,
@@ -32,7 +32,7 @@ class UserModel {
       email: json['email'] ?? '',
       nomorTelepon: json['nomor_telepon'] ?? '',
       tanggalLahir: json['tanggal_lahir'] ?? '',
-      gender: json['jenis_kelamin'] ?? '', // Mapping dari Wisatawan.php
+      gender: json['jenis_kelamin'] ?? '',
       alamat: json['alamat'] ?? '',
       kotaAsal: json['kota_asal'] ?? '',
       fotoProfil: json['foto_profil'] ?? 'https://i.pravatar.cc/300',

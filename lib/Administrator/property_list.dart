@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'property_verification.dart';
-// IMPORT MODEL DAN SERVICE BARU
 import 'models/property_admin_model.dart';
 import 'services/admin_api_service.dart';
 
@@ -12,14 +11,12 @@ class PropertyListPage extends StatefulWidget {
 }
 
 class _PropertyListPageState extends State<PropertyListPage> {
-  // INISIALISASI SERVICE DAN FUTURE
   final AdminApiService _adminApiService = AdminApiService();
   late Future<List<PropertyAdminModel>> _futureProperties;
 
   @override
   void initState() {
     super.initState();
-    // Mengambil daftar properti dari Laravel saat inisialisasi
     _futureProperties = _adminApiService.getProperties();
   }
 
@@ -37,9 +34,9 @@ class _PropertyListPageState extends State<PropertyListPage> {
         title: const Text(
           "Property List",
           style: TextStyle(
-            fontSize: 24, 
-            color: Color(0xFF0A6A84), 
-            fontWeight: FontWeight.bold
+            fontSize: 24,
+            color: Color(0xFF0A6A84),
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),
@@ -57,7 +54,9 @@ class _PropertyListPageState extends State<PropertyListPage> {
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(child: Text('Tidak ada properti yang perlu diverifikasi'));
+              return const Center(
+                child: Text('Tidak ada properti yang perlu diverifikasi'),
+              );
             }
 
             final properties = snapshot.data!;
@@ -82,8 +81,12 @@ class _PropertyListPageState extends State<PropertyListPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              p.name, // Menggunakan data dari model dinamis
-                              style: const TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+                              p.name,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                               overflow: TextOverflow.ellipsis,
                             ),
                             Text(
@@ -105,27 +108,26 @@ class _PropertyListPageState extends State<PropertyListPage> {
                           foregroundColor: const Color(0xFF0A6A84),
                         ),
                         onPressed: () async {
-                          // PERBAIKAN BARIS 112: Kirim seluruh objek properti 'p' 
-                          // agar sinkron dengan konstruktor PropertyVerificationPage
                           final result = await Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => PropertyVerificationPage(
-                                property: p, 
-                              ),
+                              builder: (_) =>
+                                  PropertyVerificationPage(property: p),
                             ),
                           );
 
-                          // Jika kembali dengan status 'approved', refresh list dari database
                           if (result == "approved") {
                             setState(() {
-                              _futureProperties = _adminApiService.getProperties(); 
+                              _futureProperties = _adminApiService
+                                  .getProperties();
                             });
 
                             if (mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text("Status Properti Berhasil Diperbarui"),
+                                  content: Text(
+                                    "Status Properti Berhasil Diperbarui",
+                                  ),
                                   backgroundColor: Colors.teal,
                                 ),
                               );
@@ -133,7 +135,7 @@ class _PropertyListPageState extends State<PropertyListPage> {
                           }
                         },
                         child: const Text("Actions"),
-                      )
+                      ),
                     ],
                   ),
                 );

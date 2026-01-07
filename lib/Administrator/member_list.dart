@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// IMPORT MODEL DAN SERVICE BARU
 import 'models/member_model.dart';
 import 'services/admin_api_service.dart';
 
@@ -11,25 +10,25 @@ class MemberListPage extends StatefulWidget {
 }
 
 class _MemberListPageState extends State<MemberListPage> {
-  // INISIALISASI SERVICE DAN FUTURE
   final AdminApiService _adminApiService = AdminApiService();
   late Future<List<MemberModel>> _futureMembers;
 
   @override
   void initState() {
     super.initState();
-    // Memanggil daftar member dari Laravel saat halaman dibuka
     _futureMembers = _adminApiService.getMembers();
   }
 
-  // Fungsi Helper untuk memperbarui status member (Aktif/Nonaktif)
   void _toggleMemberStatus(MemberModel member) async {
     String statusBaru = member.isActive ? 'nonaktif' : 'aktif';
-    bool sukses = await _adminApiService.updateUserStatus(member.idUser, statusBaru);
+    bool sukses = await _adminApiService.updateUserStatus(
+      member.idUser,
+      statusBaru,
+    );
 
     if (sukses) {
       setState(() {
-        _futureMembers = _adminApiService.getMembers(); // Refresh data
+        _futureMembers = _adminApiService.getMembers();
       });
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -46,7 +45,6 @@ class _MemberListPageState extends State<MemberListPage> {
       body: SafeArea(
         child: Column(
           children: [
-            // --- HEADER TETAP SESUAI DESAIN IKA ---
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
               color: Colors.white,
@@ -57,29 +55,39 @@ class _MemberListPageState extends State<MemberListPage> {
                     children: [
                       IconButton(
                         onPressed: () => Navigator.pop(context),
-                        icon: const Icon(Icons.arrow_back, color: Color(0xff197B82)),
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          color: Color(0xff197B82),
+                        ),
                       ),
                       const SizedBox(width: 5),
                       const Text(
                         "Member List",
-                        style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Color(0xff197B82)),
+                        style: TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xff197B82),
+                        ),
                       ),
                     ],
                   ),
                   Container(
-                    width: 50, height: 50,
+                    width: 50,
+                    height: 50,
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
-                      image: DecorationImage(image: AssetImage("assets/images/profile.jpeg"), fit: BoxFit.cover),
+                      image: DecorationImage(
+                        image: AssetImage("assets/images/profile.jpeg"),
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
 
             const SizedBox(height: 10),
 
-            // --- SEARCH & CATEGORY TETAP SESUAI DESAIN IKA ---
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
@@ -106,16 +114,19 @@ class _MemberListPageState extends State<MemberListPage> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     height: 45,
-                    decoration: BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.grey)),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.grey),
+                    ),
                     child: const Center(child: Text("Category")),
-                  )
+                  ),
                 ],
               ),
             ),
 
             const SizedBox(height: 20),
 
-            // --- MEMBER LIST MENGGUNAKAN FUTUREBUILDER ---
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () async {
@@ -131,7 +142,9 @@ class _MemberListPageState extends State<MemberListPage> {
                     } else if (snapshot.hasError) {
                       return Center(child: Text('Error: ${snapshot.error}'));
                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Center(child: Text('Tidak ada member ditemukan'));
+                      return const Center(
+                        child: Text('Tidak ada member ditemukan'),
+                      );
                     }
 
                     final members = snapshot.data!;
@@ -156,25 +169,42 @@ class _MemberListPageState extends State<MemberListPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    member.name, // Data dinamis dari database
-                                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff197B82)),
+                                    member.name,
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xff197B82),
+                                    ),
                                   ),
                                   const SizedBox(height: 5),
                                   Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 5,
+                                    ),
                                     decoration: BoxDecoration(
-                                      color: member.isActive ? Colors.green.shade200 : Colors.red.shade200,
+                                      color: member.isActive
+                                          ? Colors.green.shade200
+                                          : Colors.red.shade200,
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Text(
-                                      member.isActive ? "Active Member" : "Inactive",
-                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                      member.isActive
+                                          ? "Active Member"
+                                          : "Inactive",
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
                                     "registered ${member.registrationDate}",
-                                    style: const TextStyle(fontSize: 14, fontStyle: FontStyle.italic, color: Colors.black54),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontStyle: FontStyle.italic,
+                                      color: Colors.black54,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -182,17 +212,26 @@ class _MemberListPageState extends State<MemberListPage> {
                               Column(
                                 children: [
                                   ElevatedButton(
-                                    onPressed: () => _toggleMemberStatus(member),
-                                    style: ElevatedButton.styleFrom(backgroundColor: Colors.teal, foregroundColor: Colors.white),
-                                    child: Text(member.isActive ? "Set Inactive" : "Set Active"),
+                                    onPressed: () =>
+                                        _toggleMemberStatus(member),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.teal,
+                                      foregroundColor: Colors.white,
+                                    ),
+                                    child: Text(
+                                      member.isActive
+                                          ? "Set Inactive"
+                                          : "Set Active",
+                                    ),
                                   ),
                                   const SizedBox(height: 10),
                                   IconButton(
-                                    icon: const Icon(Icons.delete, color: Colors.red),
-                                    onPressed: () {
-                                      // Logika hapus bisa ditambahkan di AdminApiService jika diperlukan
-                                    },
-                                  )
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
+                                    ),
+                                    onPressed: () {},
+                                  ),
                                 ],
                               ),
                             ],
@@ -203,7 +242,7 @@ class _MemberListPageState extends State<MemberListPage> {
                   },
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

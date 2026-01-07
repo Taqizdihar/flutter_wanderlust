@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import '../models/destinasi_model.dart'; //
-import '../services/api_service.dart'; //
-import 'package:intl/intl.dart'; //
+import '../models/destinasi_model.dart';
+import '../services/api_service.dart';
+import 'package:intl/intl.dart';
 
 class TiketScreen extends StatefulWidget {
   final int userId;
   final int idWisatawan;
 
   const TiketScreen({
-    super.key, 
-    required this.userId, 
-    required this.idWisatawan
+    super.key,
+    required this.userId,
+    required this.idWisatawan,
   });
 
   @override
@@ -24,11 +24,9 @@ class _TiketScreenState extends State<TiketScreen> {
   @override
   void initState() {
     super.initState();
-    // Memanggil API riwayat tiket berdasarkan ID Wisatawan dari database Laravel
     _futureTiket = _apiService.fetchUserTickets(widget.idWisatawan);
   }
 
-  // Fungsi untuk menyegarkan data secara manual
   Future<void> _refreshTiket() async {
     setState(() {
       _futureTiket = _apiService.fetchUserTickets(widget.idWisatawan);
@@ -38,33 +36,35 @@ class _TiketScreenState extends State<TiketScreen> {
   @override
   Widget build(BuildContext context) {
     final formatCurrency = NumberFormat.currency(
-      locale: 'id_ID', 
-      symbol: 'Rp ', 
-      decimalDigits: 0
+      locale: 'id_ID',
+      symbol: 'Rp ',
+      decimalDigits: 0,
     );
 
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: const Text(
-          'Tiket Saya', 
-          style: TextStyle(fontWeight: FontWeight.w900, color: Colors.teal)
+          'Tiket Saya',
+          style: TextStyle(fontWeight: FontWeight.w900, color: Colors.teal),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
       ),
       body: RefreshIndicator(
-        onRefresh: _refreshTiket, // Menambahkan kemampuan pull-to-refresh
+        onRefresh: _refreshTiket,
         child: FutureBuilder<List<Destinasi>>(
           future: _futureTiket,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
-              return Center(child: Text('Terjadi kesalahan: ${snapshot.error}'));
+              return Center(
+                child: Text('Terjadi kesalahan: ${snapshot.error}'),
+              );
             }
-            
+
             final daftarTiket = snapshot.data ?? [];
 
             if (daftarTiket.isEmpty) {
@@ -73,11 +73,15 @@ class _TiketScreenState extends State<TiketScreen> {
 
             return ListView.builder(
               padding: const EdgeInsets.all(20),
-              physics: const AlwaysScrollableScrollPhysics(), // Agar RefreshIndicator selalu bisa ditarik
+              physics: const AlwaysScrollableScrollPhysics(),
               itemCount: daftarTiket.length,
               itemBuilder: (context, index) {
                 final tiket = daftarTiket[index];
-                return _bangunKartuTiketAesthetic(context, tiket, formatCurrency);
+                return _bangunKartuTiketAesthetic(
+                  context,
+                  tiket,
+                  formatCurrency,
+                );
               },
             );
           },
@@ -86,7 +90,11 @@ class _TiketScreenState extends State<TiketScreen> {
     );
   }
 
-  Widget _bangunKartuTiketAesthetic(BuildContext context, Destinasi tiket, NumberFormat formatCurrency) {
+  Widget _bangunKartuTiketAesthetic(
+    BuildContext context,
+    Destinasi tiket,
+    NumberFormat formatCurrency,
+  ) {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
@@ -105,8 +113,9 @@ class _TiketScreenState extends State<TiketScreen> {
           Stack(
             children: [
               ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-                // Menampilkan gambar asli dari server Laravel
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(20),
+                ),
                 child: Image.network(
                   tiket.gambar,
                   height: 150,
@@ -123,20 +132,26 @@ class _TiketScreenState extends State<TiketScreen> {
                 top: 15,
                 right: 15,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.teal,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: const Text(
-                    'Confirmed', // Status tiket dari database
-                    style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                    'Confirmed',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
             ],
           ),
-          
           Padding(
             padding: const EdgeInsets.all(18.0),
             child: Column(
@@ -144,19 +159,29 @@ class _TiketScreenState extends State<TiketScreen> {
               children: [
                 Text(
                   tiket.nama,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Row(
                   children: [
                     const Icon(Icons.location_on, size: 14, color: Colors.teal),
                     const SizedBox(width: 4),
-                    Text(tiket.lokasi, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                    Text(
+                      tiket.lokasi,
+                      style: const TextStyle(color: Colors.grey, fontSize: 12),
+                    ),
                   ],
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 15),
-                  child: Divider(height: 1, thickness: 1, color: Color(0xFFEEEEEE)),
+                  child: Divider(
+                    height: 1,
+                    thickness: 1,
+                    color: Color(0xFFEEEEEE),
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -164,11 +189,22 @@ class _TiketScreenState extends State<TiketScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('TOTAL PEMBAYARAN', style: TextStyle(color: Colors.grey, fontSize: 10, letterSpacing: 1.2)),
+                        const Text(
+                          'TOTAL PEMBAYARAN',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 10,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
                         const SizedBox(height: 4),
                         Text(
                           formatCurrency.format(tiket.harga),
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.teal),
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.teal,
+                          ),
                         ),
                       ],
                     ),
@@ -177,12 +213,20 @@ class _TiketScreenState extends State<TiketScreen> {
                         // Fitur QR Code bisa ditambahkan di sini nantinya
                       },
                       icon: const Icon(Icons.qr_code, size: 18),
-                      label: const Text('LIHAT TIKET', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                      label: const Text(
+                        'LIHAT TIKET',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         foregroundColor: Colors.teal,
                         side: const BorderSide(color: Colors.teal),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                     ),
                   ],
@@ -202,13 +246,27 @@ class _TiketScreenState extends State<TiketScreen> {
         children: [
           Container(
             padding: const EdgeInsets.all(30),
-            decoration: BoxDecoration(color: Colors.teal.withOpacity(0.05), shape: BoxShape.circle),
-            child: Icon(Icons.confirmation_num_outlined, size: 80, color: Colors.teal.withOpacity(0.2)),
+            decoration: BoxDecoration(
+              color: Colors.teal.withOpacity(0.05),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.confirmation_num_outlined,
+              size: 80,
+              color: Colors.teal.withOpacity(0.2),
+            ),
           ),
           const SizedBox(height: 20),
-          const Text('Belum Ada Tiket Dipesan', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          const Text(
+            'Belum Ada Tiket Dipesan',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 8),
-          const Text('Tiket yang Anda pesan di halaman Beranda\nakan muncul secara otomatis di sini.', textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
+          const Text(
+            'Tiket yang Anda pesan di halaman Beranda\nakan muncul secara otomatis di sini.',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.grey),
+          ),
         ],
       ),
     );
