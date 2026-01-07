@@ -8,6 +8,7 @@ import 'admin_profile.dart';
 // IMPORT SERVICE DAN MODEL BARU
 import 'services/admin_api_service.dart';
 import 'models/admin_stats_model.dart';
+import '../login.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -72,25 +73,32 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void _showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Logout"),
-        content: const Text("Are you sure you want to exit?"),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Cancel"),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Logout", style: TextStyle(color: Colors.white)),
-          ),
-        ],
-      ),
-    );
-  }
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text("Logout"),
+      content: const Text("Are you sure you want to exit?"),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context), 
+          child: const Text("Cancel")
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+          onPressed: () {
+            // PERBAIKAN: Navigasi reset ke LoginScreen
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+              (route) => false,
+            );
+          },
+          child: const Text("Logout", style: TextStyle(color: Colors.white)),
+        ),
+      ],
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
