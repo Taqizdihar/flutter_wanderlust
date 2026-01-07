@@ -139,7 +139,15 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _buildEditButton(BuildContext context) {
     return ElevatedButton(
-      onPressed: () => _navToNoPage(context),
+      onPressed: () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Currently Unavailable"),
+            backgroundColor: Color(0xFF00838F),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      },
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFF00838F),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -225,9 +233,10 @@ class _ProfilePageState extends State<ProfilePage> {
             child: const Text("No"),
           ),
           TextButton(
-            onPressed: () => Navigator.pushReplacement(
+            onPressed: () => Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (c) => const LoginScreen()),
+              (route) => false,
             ),
             child: const Text("Yes", style: TextStyle(color: Colors.red)),
           ),
